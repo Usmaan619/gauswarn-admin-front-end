@@ -12,6 +12,7 @@ import LogoRajlaxmi from "../../Assets/Images/Logo/rajlaxmi.svg";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useContext } from "react";
 import { UserContext } from "../../../Context/UserContext";
+import { PiFlagBannerFold } from "react-icons/pi";
 
 // ✅ default open if on tablet screen
 const isTabletWidth = () =>
@@ -75,6 +76,11 @@ const Sidebar = () => {
   const gauswarnLinks = [
     { to: "/home", icon: FiHome, label: "Dashboard" },
     { to: "/order", icon: GoListUnordered, label: "Orders" },
+    {
+      to: "/home-page-banner-change",
+      icon: PiFlagBannerFold,
+      label: "Home Banner",
+    },
     { to: "/productinfo", icon: LiaTagSolid, label: "Products" },
     { to: "/customer", icon: MdPeopleOutline, label: "Customers" },
     { to: "/contact", icon: BiPhone, label: "Contact" },

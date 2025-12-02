@@ -667,7 +667,7 @@ const ProductInfo = () => {
 
                               <button
                                 type="button"
-                                className="btn btn-sm btn-primary w-100 mt-2 shadow-sm"
+                                className="btn btn-sm btn-danger w-100 mt-2 shadow-sm"
                                 onClick={() =>
                                   document.getElementById(`img-${index}-${imgIndex}`).click()
                                 }
@@ -705,7 +705,7 @@ const ProductInfo = () => {
                         type="button"
                         className="btn btn-lg px-5 shadow-sm"
                         style={{
-                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                          background: 'linear-gradient(135deg, #e56a54 0%, #e56a54 100%)',
                           color: 'white',
                           border: 'none'
                         }}
