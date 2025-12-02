@@ -1,5 +1,8 @@
 import axios from "axios";
-import { axiosInstance, axiosInterceptor } from "../../../AxiosInstance/axiosInstance";
+import {
+  axiosInstance,
+  axiosInterceptor,
+} from "../../../AxiosInstance/axiosInstance";
 
 const API_BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -30,6 +33,25 @@ export const postData = async (endpoint, data) => {
           "ngrok-skip-browser-warning": "true", // Required for ngrok
           "Content-Type": "application/json", // Adjust as needed
           //  "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
+
+    return response;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
+export const postFormData = async (endpoint, formData) => {
+  try {
+    const response = await axiosInstance.post(
+      `${API_BASE_URL}${endpoint}`,
+      formData,
+      {
+        headers: {
+          "ngrok-skip-browser-warning": "true",
+          "Content-Type": "multipart/form-data",
         },
       }
     );
