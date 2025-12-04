@@ -4,7 +4,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FiHome, FiLogOut } from "react-icons/fi";
 import { GoListUnordered } from "react-icons/go";
 import { LiaTagSolid } from "react-icons/lia";
-import { MdPeopleOutline } from "react-icons/md";
+import { MdPeopleOutline, MdSlowMotionVideo } from "react-icons/md";
 import { BiPhone } from "react-icons/bi";
 import { FaRegCommentDots, FaBars } from "react-icons/fa6";
 import Logo from "../../Assets/Images/Logo/logo.svg";
@@ -80,6 +80,11 @@ const Sidebar = () => {
       to: "/home-page-banner-change",
       icon: PiFlagBannerFold,
       label: "Home Banner",
+    },
+    {
+      to: "/reels-upload",
+      icon: MdSlowMotionVideo,
+      label: "Reels",
     },
     { to: "/productinfo", icon: LiaTagSolid, label: "Products" },
     { to: "/customer", icon: MdPeopleOutline, label: "Customers" },

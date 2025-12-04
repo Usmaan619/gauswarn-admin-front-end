@@ -106,6 +106,7 @@ import { axiosInterceptor } from "../AxiosInstance/axiosInstance.jsx";
 import Error from "../components/Pages/Error404/error.jsx";
 import HomeBannerMainPage from "../components/Pages/Home-Banner/home-banner-main-page.jsx";
 import BannerManager from "../components/Pages/Home-Banner/home-banner.jsx";
+import ReelUploader from "../components/Pages/Reels/reelsUpload.jsx";
 
 const AuthRoutes = () => {
   const { UserLogin, setUserLogin } = useContext(UserContext);
@@ -130,10 +131,10 @@ const AuthRoutes = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/order" element={<Order />} />
           <Route path="/product" element={<Product />} />
-          <Route
-            path="/home-page-banner-change"
-            element={<BannerManager />}
-          />
+          <Route path="/home-page-banner-change" element={<BannerManager />} />
+
+          <Route path="/reels-upload" element={<ReelUploader />} />
+
           <Route path="/productinfo" element={<ProductInfo />} />
           <Route path="/customer" element={<Customer />} />
           <Route path="/customerinfo" element={<CustomerInfo />} />
