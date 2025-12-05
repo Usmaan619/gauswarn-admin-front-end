@@ -19,7 +19,7 @@ const BannerManager = () => {
 
   const fetchBanners = async () => {
     try {
-      const res = await getData("/home-banners");
+      const res = await getData("home-banners");
       if (res) setBanners(res);
     } catch (err) {
       console.log(err);

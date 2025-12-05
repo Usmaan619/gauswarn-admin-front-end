@@ -13,6 +13,7 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useContext } from "react";
 import { UserContext } from "../../../Context/UserContext";
 import { PiFlagBannerFold } from "react-icons/pi";
+import { LayoutPanelTop } from "lucide-react";
 
 // ✅ default open if on tablet screen
 const isTabletWidth = () =>
@@ -86,6 +87,13 @@ const Sidebar = () => {
       icon: MdSlowMotionVideo,
       label: "Reels",
     },
+
+    {
+      to: "/blog",
+      icon: LayoutPanelTop,
+      label: "Blogs",
+    },
+
     { to: "/productinfo", icon: LiaTagSolid, label: "Products" },
     { to: "/customer", icon: MdPeopleOutline, label: "Customers" },
     { to: "/contact", icon: BiPhone, label: "Contact" },

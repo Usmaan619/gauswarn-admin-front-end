@@ -107,6 +107,12 @@ import Error from "../components/Pages/Error404/error.jsx";
 import HomeBannerMainPage from "../components/Pages/Home-Banner/home-banner-main-page.jsx";
 import BannerManager from "../components/Pages/Home-Banner/home-banner.jsx";
 import ReelUploader from "../components/Pages/Reels/reelsUpload.jsx";
+import BlogMain from "../components/Pages/Blogs/BlogMain.jsx";
+import BlogCreate from "../components/Pages/Blogs/BlogCreate.jsx";
+import BlogList from "../components/Pages/Blogs/BlogList.jsx";
+import BlogView from "../components/Pages/Blogs/BlogView.jsx";
+import BlogEdit from "../components/Pages/Blogs/BlogEdit.jsx";
+import BlogsTest from "../components/Pages/Blogs/blogtest.jsx";
 
 const AuthRoutes = () => {
   const { UserLogin, setUserLogin } = useContext(UserContext);
@@ -140,6 +146,12 @@ const AuthRoutes = () => {
           <Route path="/customerinfo" element={<CustomerInfo />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/contact" element={<Contact />} />
+
+          <Route path="/blog" element={<BlogsTest />} />
+          <Route path="/blog/create" element={<BlogCreate />} />
+          <Route path="/blog/list" element={<BlogList />} />
+          <Route path="/blog/view/:slug" element={<BlogView />} />
+          <Route path="/blog/edit/:id" element={<BlogEdit />} />
 
           {/* Rajlaxmi Routes */}
           <Route path="/rajlaxmi" element={<RajlaxmiDashboard />} />
