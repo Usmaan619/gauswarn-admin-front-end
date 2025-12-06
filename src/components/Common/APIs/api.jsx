@@ -97,3 +97,16 @@ export const deleteDataReel = async (endpoint) => {
     throw error.response?.data || error.message;
   }
 };
+
+
+
+
+export const deleteDataNew = async (url) => {
+  try {
+    const res = await axiosInstance.delete(`${API_BASE_URL}${url}`);
+    return res.data;
+  } catch (err) {
+    console.error("DELETE ERROR:", err);
+    return err.response?.data || { success: false };
+  }
+};

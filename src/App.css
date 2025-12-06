@@ -585,3 +585,17 @@ object-fit: cover;
 .blog-editor {
   margin-bottom: 20px;
 }
+
+
+
+.status-spot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  display:inline-block;
+}
+
+.yellow-spot{background:#f1c40f;}
+.red-spot{background:#e74c3c;}
+.blue-spot{background:#3498db;}
+.green-spot{background:#2ecc71;}
