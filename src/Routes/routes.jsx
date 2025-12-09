@@ -114,6 +114,8 @@ import BlogView from "../components/Pages/Blogs/BlogView.jsx";
 import BlogEdit from "../components/Pages/Blogs/BlogEdit.jsx";
 import BlogsTest from "../components/Pages/Blogs/blogtest.jsx";
 import Inquiry from "../components/Pages/Inquiry/Inquiry.jsx";
+import CreateAdminUser from "../components/Pages/CreateAdminUser/CreateAdminUser.jsx";
+import CreateAdminUserPage from "../components/Pages/CreateAdminUser/CreateAdminUser.jsx";
 
 const AuthRoutes = () => {
   const { UserLogin, setUserLogin } = useContext(UserContext);
@@ -150,8 +152,8 @@ const AuthRoutes = () => {
 
           <Route path="/blog" element={<BlogsTest />} />
           <Route path="/inquiry" element={<Inquiry />} />
+          <Route path="/create-admin-user" element={<CreateAdminUserPage />} />
 
-          
           <Route path="/blog/create" element={<BlogCreate />} />
           <Route path="/blog/list" element={<BlogList />} />
           <Route path="/blog/view/:slug" element={<BlogView />} />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./sidebar.css";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FiHome, FiLogOut } from "react-icons/fi";
@@ -10,16 +10,15 @@ import {
   MdSlowMotionVideo,
 } from "react-icons/md";
 import { BiPhone } from "react-icons/bi";
-import { FaRegCommentDots, FaBars } from "react-icons/fa6";
+import { FaRegCommentDots, FaBars, FaUsers } from "react-icons/fa6";
 import Logo from "../../Assets/Images/Logo/logo.svg";
 import LogoRajlaxmi from "../../Assets/Images/Logo/rajlaxmi.svg";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { useContext } from "react";
 import { UserContext } from "../../../Context/UserContext";
 import { PiFlagBannerFold } from "react-icons/pi";
 import { LayoutPanelTop } from "lucide-react";
 
-// ✅ default open if on tablet screen
+// default open if on tablet screen
 const isTabletWidth = () =>
   typeof window !== "undefined" &&
   window.innerWidth >= 768 &&
@@ -32,6 +31,8 @@ const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const { setUserLogin, userPermissions } = useContext(UserContext);
+
   const isRajlaxmi = location.pathname.includes("/rajlaxmi");
   const logoToShow = isRajlaxmi ? LogoRajlaxmi : Logo;
 
@@ -43,12 +44,21 @@ const Sidebar = () => {
     }
   };
 
+  // 🔥 PERMISSION CHECKER
+  const hasPermission = (required) => {
+    if (!required) return true;
+    if (!userPermissions) return false;
+    return (
+      userPermissions.includes(required) || userPermissions.includes("all") // super admin
+    );
+  };
+
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       if (width >= 768 && width <= 1024) {
-        setIsMobileOpen(true); // ✅ keep open on tablets
-        setIsCollapsed(false); // ensure not collapsed
+        setIsMobileOpen(true);
+        setIsCollapsed(false);
       } else if (width > 1024) {
         setIsMobileOpen(false);
       } else {
@@ -59,8 +69,6 @@ const Sidebar = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const { setUserLogin } = useContext(UserContext);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -78,32 +86,160 @@ const Sidebar = () => {
     { to: "/", icon: FiLogOut, label: "Logout" },
   ];
 
+  // const gauswarnLinks = [
+  //   { to: "/home", icon: FiHome, label: "Dashboard" },
+  //   {
+  //     to: "/order",
+  //     icon: GoListUnordered,
+  //     label: "Orders",
+  //     permission: "orders",
+  //   },
+  //   {
+  //     to: "/home-page-banner-change",
+  //     icon: PiFlagBannerFold,
+  //     label: "Home Banner",
+  //     permission: "orders",
+  //   },
+  //   {
+  //     to: "/reels-upload",
+  //     icon: MdSlowMotionVideo,
+  //     label: "Reels",
+  //     permission: "reel",
+  //   },
+  //   {
+  //     to: "/blog",
+  //     icon: LayoutPanelTop,
+  //     label: "Blogs",
+  //     permission: "blogs",
+  //   },
+  //   {
+  //     to: "/create-admin-user",
+  //     icon: FaUsers,
+
+  //     permission: "orders",
+  //     label: "Create Users",
+  //   },
+  //   {
+  //     to: "/productinfo",
+  //     icon: LiaTagSolid,
+
+  //     permission: "orders",
+  //     label: "Products",
+  //   },
+  //   {
+  //     to: "/customer",
+  //     icon: MdPeopleOutline,
+
+  //     permission: "orders",
+  //     label: "Customers",
+  //   },
+  //   {
+  //     to: "/inquiry",
+  //     icon: MdConnectWithoutContact,
+
+  //     permission: "orders",
+  //     label: "B2B Inquiry",
+  //   },
+  //   {
+  //     to: "/contact",
+  //     icon: BiPhone,
+
+  //     permission: "orders",
+  //     label: "Contact",
+  //   },
+  //   {
+  //     to: "/feedback",
+  //     icon: FaRegCommentDots,
+
+  //     permission: "orders",
+  //     label: "Feedback",
+  //   },
+  //   {
+  //     to: "/",
+  //     icon: FiLogOut,
+
+  //     permission: "orders",
+  //     label: "Logout",
+  //   },
+  // ];
   const gauswarnLinks = [
     { to: "/home", icon: FiHome, label: "Dashboard" },
-    { to: "/order", icon: GoListUnordered, label: "Orders" },
+
+    {
+      to: "/order",
+      icon: GoListUnordered,
+      label: "Orders",
+      permission: "orders",
+    },
+
     {
       to: "/home-page-banner-change",
       icon: PiFlagBannerFold,
       label: "Home Banner",
+      permission: "banners",
     },
+
     {
       to: "/reels-upload",
       icon: MdSlowMotionVideo,
       label: "Reels",
+      permission: "reels",
     },
 
     {
       to: "/blog",
       icon: LayoutPanelTop,
       label: "Blogs",
+      permission: "blogs",
     },
 
-    { to: "/productinfo", icon: LiaTagSolid, label: "Products" },
-    { to: "/customer", icon: MdPeopleOutline, label: "Customers" },
-    { to: "/inquiry", icon: MdConnectWithoutContact, label: "B2B Inquiry" },
-    { to: "/contact", icon: BiPhone, label: "Contact" },
-    { to: "/feedback", icon: FaRegCommentDots, label: "Feedback" },
-    { to: "/", icon: FiLogOut, label: "Logout" },
+    {
+      to: "/create-admin-user",
+      icon: FaUsers,
+      label: "Create Users",
+      permission: "users",
+    },
+
+    {
+      to: "/productinfo",
+      icon: LiaTagSolid,
+      label: "Products",
+      permission: "products",
+    },
+
+    {
+      to: "/customer",
+      icon: MdPeopleOutline,
+      label: "Customers",
+      permission: "customers",
+    },
+
+    {
+      to: "/inquiry",
+      icon: MdConnectWithoutContact,
+      label: "B2B Inquiry",
+      permission: "b2b",
+    },
+
+    {
+      to: "/contact",
+      icon: BiPhone,
+      label: "Contact",
+      permission: "contact",
+    },
+
+    {
+      to: "/feedback",
+      icon: FaRegCommentDots,
+      label: "Feedback",
+      permission: "feedback",
+    },
+
+    {
+      to: "/",
+      icon: FiLogOut,
+      label: "Logout",
+    },
   ];
 
   const links = isRajlaxmi ? rajlaxmiLinks : gauswarnLinks;
@@ -149,39 +285,16 @@ const Sidebar = () => {
         </div>
 
         <nav className="nav-links d-flex flex-column gap-2 mt-4">
-          {links.map(({ to, icon: Icon, label }) => {
-            const hoverClass = isRajlaxmi ? "rajlaxmi-hover" : "gauswarn-hover";
+          {links.map(({ to, icon: Icon, label, permission }) => {
+            if (!hasPermission(permission)) return null;
 
-            if (label === "Logout") {
-              return (
-                <NavLink
-                  key={to}
-                  to={to}
-                  end={to === (isRajlaxmi ? "/rajlaxmi" : "/")}
-                  onClick={handleLogout}
-                  className={({ isActive }) =>
-                    `d-flex align-items-center gap-2 ${hoverClass} ${
-                      isActive
-                        ? isRajlaxmi
-                          ? "active-rajlaxmi"
-                          : "active-gauswarn"
-                        : ""
-                    }`
-                  }
-                >
-                  <span className="icon">
-                    <Icon />
-                  </span>
-                  {!isCollapsed && <span className="label">{label}</span>}
-                </NavLink>
-              );
-            }
+            const hoverClass = isRajlaxmi ? "rajlaxmi-hover" : "gauswarn-hover";
 
             return (
               <NavLink
                 key={to}
                 to={to}
-                end={to === (isRajlaxmi ? "/rajlaxmi" : "/")}
+                onClick={label === "Logout" ? handleLogout : undefined}
                 className={({ isActive }) =>
                   `d-flex align-items-center gap-2 ${hoverClass} ${
                     isActive

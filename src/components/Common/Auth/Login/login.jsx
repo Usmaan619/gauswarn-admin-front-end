@@ -17,7 +17,9 @@ const Login = () => {
 
   const navigate = useNavigate();
   const endpoint = "/login";
-  const { setUserLogin } = useContext(UserContext);
+  // const { setUserLogin } = useContext(UserContext);
+  const { setUserLogin, setUserPermissions } = useContext(UserContext);
+
   const onSubmit = async (data) => {
     try {
       const response = await postData(endpoint, data);
@@ -29,15 +31,16 @@ const Login = () => {
         setItem("name", response?.data?.name);
 
         setUserLogin(response?.data?.accessToken);
+        setUserPermissions(response?.data?.permissions || []);
+
         toastSuccess(response?.data?.message);
         setTimeout(() => navigate("/home"), 1000);
+      } else {
+        toastError(response?.data?.message || "Login failed");
       }
-     else {
-      toastError(response?.data?.message || "Login failed");
+    } catch (error) {
+      toastError(error?.message || "Something went wrong");
     }
-  } catch (error) {
-    toastError(error?.message || "Something went wrong");
-  }
   };
   return (
     <>
@@ -80,15 +83,15 @@ const Login = () => {
               <input
                 type="password"
                 className="form-control text-white py-2 border-0"
-              //   {...register("password", {
-              //     required: "Passowrd is required",
-              //   })}
-              // />
-              // {errors.password && (
-              //   <div className="text-danger">{errors.password.message}</div>
-              // )}
-              
-                  {...register("password", {
+                //   {...register("password", {
+                //     required: "Passowrd is required",
+                //   })}
+                // />
+                // {errors.password && (
+                //   <div className="text-danger">{errors.password.message}</div>
+                // )}
+
+                {...register("password", {
                   required: "Password is required",
                   minLength: {
                     value: 6,
@@ -96,7 +99,8 @@ const Login = () => {
                   },
                   pattern: {
                     // one uppercase, one special char, min 6 chars total
-                    value: /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).{6,}$/,
+                    value:
+                      /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).{6,}$/,
                     message:
                       "Must include 1 capital letter and 1 special character",
                   },
@@ -105,7 +109,6 @@ const Login = () => {
               {errors.password && (
                 <div className="text-danger">{errors.password.message}</div>
               )}
-
             </div>
 
             <div className="options d-flex align-items-center justify-content-between">
