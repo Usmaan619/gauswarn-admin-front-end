@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../../Common/Navbar/navbar";
 import SideBar from "../../Common/SideBar/sidebar";
-import CreateAdminUser from "./CreateAdminUserComponent";
+import GauswarnUsersTable from "./GauswarnUsersTable";
 
 const CreateAdminUserPage = () => {
   return (
@@ -14,11 +14,8 @@ const CreateAdminUserPage = () => {
         </div>
 
         <div className="col-lg-10 px-lg-5">
-          <h3 className="inter-font-family-600 text-dark my-4">
-            Create Admin User
-          </h3>
-
-          <CreateAdminUser />
+          <h3 className="my-4">Create Admin User</h3>
+          <GauswarnUsersTable />
         </div>
       </div>
     </div>

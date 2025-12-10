@@ -114,8 +114,7 @@ import BlogView from "../components/Pages/Blogs/BlogView.jsx";
 import BlogEdit from "../components/Pages/Blogs/BlogEdit.jsx";
 import BlogsTest from "../components/Pages/Blogs/blogtest.jsx";
 import Inquiry from "../components/Pages/Inquiry/Inquiry.jsx";
-import CreateAdminUser from "../components/Pages/CreateAdminUser/CreateAdminUser.jsx";
-import CreateAdminUserPage from "../components/Pages/CreateAdminUser/CreateAdminUser.jsx";
+import CreateAdminUserPage from "../components/Pages/CreateAdminUser/CreateAdminUserPage.jsx";
 
 const AuthRoutes = () => {
   const { UserLogin, setUserLogin } = useContext(UserContext);
