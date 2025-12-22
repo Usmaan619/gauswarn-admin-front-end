@@ -16,7 +16,8 @@ import LogoRajlaxmi from "../../Assets/Images/Logo/rajlaxmi.svg";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { UserContext } from "../../../Context/UserContext";
 import { PiFlagBannerFold } from "react-icons/pi";
-import { LayoutPanelTop } from "lucide-react";
+import { LayoutPanelTop, Newspaper } from "lucide-react";
+import { IoNewspaperOutline } from "react-icons/io5";
 
 // default open if on tablet screen
 const isTabletWidth = () =>
@@ -31,7 +32,8 @@ const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { setUserLogin, userPermissions } = useContext(UserContext);
+  const { setUserLogin, userPermissions, setUserPermissions } =
+    useContext(UserContext);
 
   const isRajlaxmi = location.pathname.includes("/rajlaxmi");
   const logoToShow = isRajlaxmi ? LogoRajlaxmi : Logo;
@@ -71,11 +73,19 @@ const Sidebar = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.clear();
+    //  localStorage clear karo
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    localStorage.removeItem("name");
+    localStorage.removeItem("permissions");
+
+    //  Context values reset karo
     setUserLogin(null);
+    setUserPermissions([]);
+
+    // Navigate to login
     navigate("/login");
   };
-
   const rajlaxmiLinks = [
     { to: "/rajlaxmi", icon: FiHome, label: "Dashboard" },
     { to: "/rajlaxmi/order", icon: GoListUnordered, label: "Orders" },
@@ -226,6 +236,13 @@ const Sidebar = () => {
       icon: BiPhone,
       label: "Contact",
       permission: "contact",
+    },
+
+    {
+      to: "/newlatter",
+      icon: IoNewspaperOutline,
+      label: "Newlatter",
+      permission: "newsletter",
     },
 
     {

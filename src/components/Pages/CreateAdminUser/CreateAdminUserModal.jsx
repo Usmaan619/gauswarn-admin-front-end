@@ -17,6 +17,7 @@ const PERMISSION_LIST = [
   { id: "customers", label: "Customers" },
   { id: "contact", label: "Contact" },
   { id: "feedback", label: "Feedback" },
+  { id: "newsletter", label: "Newlatter" },
 ];
 
 const CreateAdminUserModal = ({ show, onClose, onSuccess, editUser }) => {
