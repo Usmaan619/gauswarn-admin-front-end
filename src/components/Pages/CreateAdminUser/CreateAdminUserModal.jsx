@@ -17,6 +17,7 @@ const PERMISSION_LIST = [
   { id: "customers", label: "Customers" },
   { id: "contact", label: "Contact" },
   { id: "feedback", label: "Feedback" },
+  { id: "offerbanner", label: "Offer Banner" },
   { id: "newsletter", label: "Newlatter" },
 ];
 
