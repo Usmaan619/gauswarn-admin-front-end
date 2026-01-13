@@ -40,6 +40,7 @@ import Inquiry from "../components/Pages/Inquiry/Inquiry.jsx";
 import NewsletterPage from "../components/Pages/Newsletter/Newsletter.jsx";
 
 import CreateAdminUserPage from "../components/Pages/CreateAdminUser/CreateAdminUserPage.jsx";
+import OfferManagement from "../components/OfferManagement/OfferManagement.jsx";
 
 const AuthRoutes = () => {
   const { UserLogin, setUserLogin } = useContext(UserContext);
@@ -77,6 +78,7 @@ const AuthRoutes = () => {
           <Route path="/blog" element={<BlogsTest />} />
           <Route path="/inquiry" element={<Inquiry />} />
           <Route path="/newlatter" element={<NewsletterPage />} />
+          <Route path="/offerBanner" element={<OfferManagement />} />
           <Route path="/create-admin-user" element={<CreateAdminUserPage />} />
 
           <Route path="/blog/create" element={<BlogCreate />} />

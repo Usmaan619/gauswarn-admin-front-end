@@ -1,5 +1,5 @@
 .sidebar {
-  width: 16%; 
+  width: 16%;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -12,6 +12,9 @@
   flex-direction: column;
   transition: all 0.3s ease;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.15);
+  /* ✅ SCROLL ADDED ONLY */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sidebar.collapsed {
@@ -38,7 +41,7 @@
 
 .desktop-toggle-btn {
   position: absolute;
-  right: -18px;
+  right: 5px;
   top: 61px;
   border: 1px solid var(--dark-brown-color);
   border-radius: 8px;

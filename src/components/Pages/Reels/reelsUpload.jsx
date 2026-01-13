@@ -147,12 +147,12 @@ const ReelUploader = () => {
                   View
                 </button>
 
-                <button
+                {/* <button
                   className="btn btn-warning btn-sm"
                   onClick={() => startEdit(r.id, r.reel_id)}
                 >
                   Edit
-                </button>
+                </button> */}
 
                 <button
                   className="btn btn-danger btn-sm"

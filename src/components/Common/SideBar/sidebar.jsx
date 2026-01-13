@@ -16,7 +16,7 @@ import LogoRajlaxmi from "../../Assets/Images/Logo/rajlaxmi.svg";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { UserContext } from "../../../Context/UserContext";
 import { PiFlagBannerFold } from "react-icons/pi";
-import { LayoutPanelTop, Newspaper } from "lucide-react";
+import { LayoutPanelTop, Newspaper, RibbonIcon } from "lucide-react";
 import { IoNewspaperOutline } from "react-icons/io5";
 
 // default open if on tablet screen
@@ -243,6 +243,12 @@ const Sidebar = () => {
       icon: IoNewspaperOutline,
       label: "Newlatter",
       permission: "newsletter",
+    },
+    {
+      to: "/offerBanner",
+      icon: RibbonIcon,
+      label: "Offer Banner",
+      permission: "offerbanner",
     },
 
     {
