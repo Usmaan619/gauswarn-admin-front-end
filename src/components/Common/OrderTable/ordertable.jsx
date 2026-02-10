@@ -4,9 +4,9 @@ import Pagination from "react-bootstrap/Pagination";
 import noDataImg from "../../Assets/Images/home-img/flat-design-no-data-illustration.png";
 
 const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
-
   const [currentPage, setCurrentPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState("");
+  const [paymentFilter, setPaymentFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [viewData, setViewData] = useState(null);
 
@@ -33,20 +33,28 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
     refresh();
   };
 
+  // FILTER LOGIC
   const filteredOrders = ordersData.filter((order) => {
     const matchesStatus = statusFilter ? order.STATUS === statusFilter : true;
+
+    const matchesPayment = paymentFilter
+      ? paymentFilter === "paid"
+        ? order.isPaymentPaid === "1"
+        : order.isPaymentPaid === "0"
+      : true;
+
     const matchesSearch =
       order?.user_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       order?.user_id?.toString().includes(searchQuery);
 
-    return matchesStatus && matchesSearch;
+    return matchesStatus && matchesSearch && matchesPayment;
   });
 
   const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
 
   const paginatedOrders = filteredOrders.slice(
     (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    currentPage * itemsPerPage,
   );
 
   return (
@@ -54,6 +62,35 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
       <p className="p-3 recent-tble-header bg-light-green-color font-20">
         Orders History
       </p>
+
+      {/* FILTERS */}
+      <div className="d-flex gap-2 px-3 py-2 flex-wrap">
+        {/* Payment Filter */}
+        <select
+          className="form-select w-auto"
+          value={paymentFilter}
+          onChange={(e) => {
+            setPaymentFilter(e.target.value);
+            setCurrentPage(1);
+          }}
+        >
+          <option value="">All Payments</option>
+          <option value="paid">Paid</option>
+          <option value="unpaid">Unpaid</option>
+        </select>
+
+        {/* Search */}
+        <input
+          type="text"
+          className="form-control w-auto"
+          placeholder="Search name or ID"
+          value={searchQuery}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setCurrentPage(1);
+          }}
+        />
+      </div>
 
       <div className="table-responsive px-2">
         <table className="table text-nowrap">
@@ -91,7 +128,7 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
                   <td className="align-middle">
                     <span
                       className={`rounded-circle status-spot me-2 ${getStatusSpotClass(
-                        order.STATUS
+                        order.STATUS,
                       )}`}
                     ></span>
 
@@ -127,7 +164,10 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
       {/* PAGINATION */}
       {paginatedOrders.length > 0 && (
         <Pagination className="mx-3 my-3">
-          <Pagination.Prev onClick={() => setCurrentPage(currentPage - 1)} />
+          <Pagination.Prev
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          />
           {Array.from({ length: totalPages }, (_, index) => (
             <Pagination.Item
               key={index + 1}
@@ -137,7 +177,10 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
               {index + 1}
             </Pagination.Item>
           ))}
-          <Pagination.Next onClick={() => setCurrentPage(currentPage + 1)} />
+          <Pagination.Next
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          />
         </Pagination>
       )}
 
@@ -146,7 +189,6 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
         <div className="modal show fade d-block">
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
-              {/* HEADER */}
               <div className="modal-header">
                 <h5 className="modal-title">Order Details</h5>
                 <button
@@ -155,222 +197,21 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
                 ></button>
               </div>
 
-              {/* BODY */}
               <div className="modal-body">
-                {/* BASIC DETAILS */}
-                <div className="mb-3">
-                  <p className="mb-1">
-                    <strong>Name:</strong> {viewData.user_name}
-                  </p>
-                  <p className="mb-1">
-                    <strong>Email:</strong> {viewData.user_email}
-                  </p>
-                  <p className="mb-1">
-                    <strong>Phone:</strong> {viewData.user_mobile_num}
-                  </p>
-
-                  <p className="mb-1">
-                    <strong>Order Amount:</strong> ₹{viewData.user_total_amount}
-                  </p>
-
-                  <p className="mb-1">
-                    <strong>Status:</strong>{" "}
-                    <span
-                      className={
-                        viewData.STATUS === "captured"
-                          ? "badge bg-success"
-                          : viewData.STATUS === "failed"
-                          ? "badge bg-danger"
-                          : "badge bg-secondary"
-                      }
-                    >
-                      {viewData.STATUS}
-                    </span>
-                  </p>
-                </div>
-
-                {/* ADDRESS */}
-                <div className="mb-3">
-                  <strong>Address:</strong>
-                  <div>
-                    {viewData.user_house_number && (
-                      <>
-                        {viewData.user_house_number}
-                        <br />
-                      </>
-                    )}
-                    {viewData.user_landmark && (
-                      <>
-                        {viewData.user_landmark}
-                        <br />
-                      </>
-                    )}
-                    {viewData.user_city && viewData.user_state && (
-                      <>
-                        {viewData.user_city}, {viewData.user_state} -{" "}
-                        {viewData.user_pincode}
-                        <br />
-                      </>
-                    )}
-                    {viewData.user_country && <>{viewData.user_country}</>}
-                  </div>
-                </div>
-
-                {/* PAYMENT DETAILS (PARSED JSON) */}
-                {(() => {
-                  let payment = null;
-
-                  try {
-                    if (viewData.paymentDetails) {
-                      // paymentDetails string hai to JSON.parse karenge
-                      payment =
-                        typeof viewData.paymentDetails === "string"
-                          ? JSON.parse(viewData.paymentDetails)
-                          : viewData.paymentDetails;
-                    }
-                  } catch (err) {
-                    console.error("Error parsing paymentDetails:", err);
-                  }
-
-                  if (!payment) {
-                    return (
-                      <div className="alert alert-warning">
-                        Payment details not available.
-                      </div>
-                    );
-                  }
-
-                  // Amount paise me hota hai (e.g. 239800 = ₹2398.00)
-                  const amount = payment.amount
-                    ? (payment.amount / 100).toFixed(2)
-                    : null;
-                  const amountCaptured = payment.amount_captured
-                    ? (payment.amount_captured / 100).toFixed(2)
-                    : null;
-                  const fee = payment.fee
-                    ? (payment.fee / 100).toFixed(2)
-                    : null;
-                  const tax = payment.tax
-                    ? (payment.tax / 100).toFixed(2)
-                    : null;
-
-                  const createdAt = payment.created_at
-                    ? new Date(payment.created_at * 1000).toLocaleString()
-                    : null;
-
-                  return (
-                    <div className="card">
-                      <div className="card-header">
-                        <strong>Payment Details</strong>
-                      </div>
-                      <div className="card-body">
-                        <div className="row">
-                          <div className="col-md-6">
-                            <p className="mb-1">
-                              <strong>Payment ID:</strong> {payment.id}
-                            </p>
-                            <p className="mb-1">
-                              <strong>Order ID:</strong> {payment.order_id}
-                            </p>
-                            <p className="mb-1">
-                              <strong>Method:</strong>{" "}
-                              {payment.method?.toUpperCase()}
-                            </p>
-                            <p className="mb-1">
-                              <strong>Status:</strong>{" "}
-                              <span
-                                className={
-                                  payment.status === "captured"
-                                    ? "badge bg-success"
-                                    : payment.status === "failed"
-                                    ? "badge bg-danger"
-                                    : "badge bg-secondary"
-                                }
-                              >
-                                {payment.status}
-                              </span>
-                            </p>
-                            {createdAt && (
-                              <p className="mb-1">
-                                <strong>Payment Date & Time:</strong>{" "}
-                                {createdAt}
-                              </p>
-                            )}
-                          </div>
-
-                          <div className="col-md-6">
-                            {amount && (
-                              <p className="mb-1">
-                                <strong>Amount:</strong> ₹{amount}{" "}
-                                {payment.currency && `(${payment.currency})`}
-                              </p>
-                            )}
-                            {amountCaptured && (
-                              <p className="mb-1">
-                                <strong>Amount Captured:</strong> ₹
-                                {amountCaptured}
-                              </p>
-                            )}
-                            {fee && (
-                              <p className="mb-1">
-                                <strong>Gateway Fee:</strong> ₹{fee}
-                              </p>
-                            )}
-                            {tax && (
-                              <p className="mb-1">
-                                <strong>Tax:</strong> ₹{tax}
-                              </p>
-                            )}
-                            {payment.upi?.vpa && (
-                              <p className="mb-1">
-                                <strong>UPI ID:</strong> {payment.upi.vpa}
-                              </p>
-                            )}
-                            {payment.acquirer_data?.rrn && (
-                              <p className="mb-1">
-                                <strong>RRN:</strong>{" "}
-                                {payment.acquirer_data.rrn}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Optional: Notes / Extra Info */}
-                        {payment.description && (
-                          <p className="mt-2 mb-1">
-                            <strong>Description:</strong> {payment.description}
-                          </p>
-                        )}
-
-                        {payment.notes && (
-                          <div className="mt-2">
-                            <strong>Notes:</strong>
-                            <ul className="mb-0">
-                              {Object.entries(payment.notes).map(
-                                ([key, value]) => (
-                                  <li key={key}>
-                                    <strong>{key}:</strong> {String(value)}
-                                  </li>
-                                )
-                              )}
-                            </ul>
-                          </div>
-                        )}
-
-                        {/* Optional: raw JSON toggle (for debugging) */}
-                        {/* <details className="mt-3">
-                    <summary>Raw Payment JSON</summary>
-                    <pre className="mt-2">
-                      {JSON.stringify(payment, null, 2)}
-                    </pre>
-                  </details> */}
-                      </div>
-                    </div>
-                  );
-                })()}
+                <p>
+                  <strong>Name:</strong> {viewData.user_name}
+                </p>
+                <p>
+                  <strong>Email:</strong> {viewData.user_email}
+                </p>
+                <p>
+                  <strong>Phone:</strong> {viewData.user_mobile_num}
+                </p>
+                <p>
+                  <strong>Order Amount:</strong> ₹{viewData.user_total_amount}
+                </p>
               </div>
 
-              {/* FOOTER */}
               <div className="modal-footer">
                 <button
                   className="btn btn-secondary"
