@@ -4,6 +4,7 @@ import { IoIosArrowRoundForward, IoIosArrowRoundBack } from "react-icons/io";
 import { deleteData, deleteDataNew, postData } from "../../Common/APIs/api";
 import noDataImg from "../../Assets/Images/home-img/flat-design-no-data-illustration.png";
 import { toastError, toastSuccess } from "../../../Services/toast.service";
+import moment from "moment/moment";
 
 const InquiryTable = ({
   inquiries,
@@ -88,6 +89,7 @@ const InquiryTable = ({
                   <th>Business</th>
                   <th>Phone</th>
                   <th>Email</th>
+                  <th>Created At</th>
                   <th>Business Type</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -101,6 +103,11 @@ const InquiryTable = ({
                     <td>{item.business_name}</td>
                     <td>{item.phone}</td>
                     <td>{item.email}</td>
+                    <td>
+                      {item.created_at
+                        ? moment(item.created_at).format("DD MMM YYYY, hh:mm A")
+                        : "-"}
+                    </td>
                     <td>{item.business_type}</td>
 
                     <td>
