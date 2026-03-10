@@ -7,15 +7,6 @@ import { getData } from "../../Common/APIs/api";
 
 
 const Feedback = () => {
-  const [averageRating, setAverageRating] = useState(0);
-  const [totalReviews, setTotalReviews] = useState(0);
-  const [ratingsBreakdown, setRatingsBreakdown] = useState({
-    5: 0,
-    4: 0,
-    3: 0,
-    2: 0,
-    1: 0,
-  });
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
@@ -26,12 +17,6 @@ const Feedback = () => {
     const endpoint = "/allfeedback";
     try {
       const response = await getData(endpoint);
-      const data = response?.data;
-      setAverageRating(data?.averageRating || 0);
-      setTotalReviews(data?.totalReviews || 0);
-      setRatingsBreakdown(
-        data?.ratingsBreakdown || { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
-      );
       setReviews(response?.reviews || []);
     } catch (error) { }
   };

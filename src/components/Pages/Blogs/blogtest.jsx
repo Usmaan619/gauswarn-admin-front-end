@@ -11,19 +11,11 @@ import {
   Eye,
   ArrowLeft,
   Save,
-  Upload,
   Search,
 } from "lucide-react";
 
 // Main Blog Manager Component
 const BlogManager = () => {
-  const [banners, setBanners] = useState({
-    banner1: null,
-    banner2: null,
-    banner3: null,
-    banner4: null,
-  });
-  const [uploading, setUploading] = useState(null);
   const [currentView, setCurrentView] = useState("main");
   const [selectedId, setSelectedId] = useState(null);
   const [selectedSlug, setSelectedSlug] = useState(null);
@@ -77,7 +69,7 @@ const BlogManager = () => {
     }
 
     try {
-      const res = await postFormData("/blogs/create", blogData);
+      await postFormData("/blogs/create", blogData);
       toastSuccess("Blog created successfully!");
       fetchBlogs();
       setCurrentView("list");
@@ -121,14 +113,6 @@ const BlogManager = () => {
     if (view === "list") fetchBlogs(1);
   };
 
-  const generateSlug = (title) => {
-    return title
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/[\s_-]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  };
 
   // Render current view
   const renderCurrentView = () => {
@@ -637,33 +621,31 @@ const BlogForm = ({ onNavigate, onSubmit, blogId, title }) => {
 
   // 🔥 CHANGED: EDIT MODE पर data load होगा
   useEffect(() => {
+    const loadBlogData = async () => {
+      try {
+        const res = await getData(`blogs/${blogId}`);
+
+        if (res?.blog) {
+          const blog = res.blog;
+
+          setFormData({
+            title: blog.title || "",
+            slug: blog.slug || "",
+            category: blog.category || "",
+            content: blog.content || "",
+          });
+
+          setImagePreview(blog.image_url || null); // पुरानी image दिखेगी
+        }
+      } catch (err) {
+        console.log("Error loading blog:", err);
+        toastError("Failed to load blog data");
+      }
+    };
     if (blogId) {
       loadBlogData();
     }
   }, [blogId]);
-
-  // 🔥 CHANGED: Backend से blog data लाने वाला function
-  const loadBlogData = async () => {
-    try {
-      const res = await getData(`blogs/${blogId}`);
-
-      if (res?.blog) {
-        const blog = res.blog;
-
-        setFormData({
-          title: blog.title || "",
-          slug: blog.slug || "",
-          category: blog.category || "",
-          content: blog.content || "",
-        });
-
-        setImagePreview(blog.image_url || null); // पुरानी image दिखेगी
-      }
-    } catch (err) {
-      console.log("Error loading blog:", err);
-      toastError("Failed to load blog data");
-    }
-  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -949,18 +931,17 @@ const BlogView = ({ onNavigate, slug }) => {
   const [blog, setBlog] = useState(null);
 
   useEffect(() => {
+    const fetchBlog = async () => {
+      try {
+        const res = await getData(`/blogs/single/${slug}`);
+        setBlog(res.blog);
+      } catch (err) {
+        console.log(err);
+        toastError("Failed to load blog");
+      }
+    };
     fetchBlog();
-  }, []);
-
-  const fetchBlog = async () => {
-    try {
-      const res = await getData(`/blogs/single/${slug}`);
-      setBlog(res.blog);
-    } catch (err) {
-      console.log(err);
-      toastError("Failed to load blog");
-    }
-  };
+  }, [slug]);
 
   if (!blog) return <p>Loading...</p>;
 

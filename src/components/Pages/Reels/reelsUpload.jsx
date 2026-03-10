@@ -4,7 +4,6 @@ import Navbar from "../../Common/Navbar/navbar";
 import {
   getData,
   postData,
-  deleteData,
   deleteDataNew,
 } from "../../Common/APIs/api";
 import { toastSuccess, toastError } from "../../../Services/toast.service";
@@ -23,6 +22,7 @@ const InstaReelEmbed = ({ reelId = "" }) => {
   return (
     <iframe
       src={src}
+      title="Instagram Reel"
       style={{ width: "100%", height: 600, border: "none" }}
       allow="autoplay; encrypted-media; picture-in-picture"
       allowFullScreen
@@ -86,10 +86,6 @@ const ReelUploader = () => {
     } else toastError("Failed");
   };
 
-  const startEdit = (id, rid) => {
-    setEditItem(id);
-    setReelId(rid);
-  };
 
   useEffect(() => {
     loadReels();

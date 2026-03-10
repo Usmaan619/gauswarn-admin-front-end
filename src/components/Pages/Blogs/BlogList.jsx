@@ -43,7 +43,7 @@ const BlogList = () => {
         {blogs.map((b) => (
           <div className="col-md-4 mb-3" key={b.id}>
             <div className="card">
-              {b.image_url && <img src={b.image_url} className="card-img-top" />}
+              {b.image_url && <img src={b.image_url} className="card-img-top" alt={b.title} />}
 
               <div className="card-body">
                 <h5>{b.title}</h5>

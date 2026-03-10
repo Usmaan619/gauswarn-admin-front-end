@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Pagination from "react-bootstrap/Pagination";
 import { IoIosArrowRoundForward, IoIosArrowRoundBack } from "react-icons/io";
-import { deleteData, deleteDataNew, postData } from "../../Common/APIs/api";
+import { deleteDataNew, postData } from "../../Common/APIs/api";
 
 import { toastError, toastSuccess } from "../../../Services/toast.service";
 import moment from "moment/moment";

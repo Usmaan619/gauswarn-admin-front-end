@@ -6,14 +6,13 @@ const BlogView = () => {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
 
-  const loadBlog = async () => {
-    const res = await getData(`blogs/${slug}`);
-    setBlog(res.blog);
-  };
-
   useEffect(() => {
+    const loadBlog = async () => {
+      const res = await getData(`blogs/${slug}`);
+      setBlog(res.blog);
+    };
     loadBlog();
-  }, []);
+  }, [slug]);
 
   if (!blog) return <h2>Loading...</h2>;
 
@@ -23,7 +22,7 @@ const BlogView = () => {
       <p className="text-muted">{blog.category}</p>
 
       {blog.image_url && (
-        <img src={blog.image_url} className="img-fluid mb-3" />
+        <img src={blog.image_url} className="img-fluid mb-3" alt={blog.title} />
       )}
 
       <div dangerouslySetInnerHTML={{ __html: blog.content }} />

@@ -8,26 +8,34 @@ import DropDowns from "../../Common/Dropdown/dropdown";
 import BarChart from "../../Common/Graph/Graph";
 
 // icons
-import { FaUsers, FaShoppingCart, FaRupeeSign } from "react-icons/fa";
+import { FaUsers, FaShoppingCart, FaBox, FaBriefcase, FaEnvelope, FaNewspaper, FaTag, FaComment } from "react-icons/fa";
 import { FiTrendingUp } from "react-icons/fi";
 
 import { getData, postData } from "../../Common/APIs/api";
 import { DropdownContext } from "../../../Context/DropdownContext";
-import { RxCrossCircled } from "react-icons/rx";
-import { ImFolderUpload } from "react-icons/im";
 
 const Home = () => {
-  const [images, setImages] = useState([]);
-  const [error, setError] = useState("");
-
   const { dropdownData } = useContext(DropdownContext);
 
-  useEffect(() => {
-    getSalesDataByAPI();
-  }, [dropdownData]);
-
   const [salesData, setSalesData] = useState();
+  const [counts, setCounts] = useState({});
   console.log("salesDataaaaaa: ", salesData);
+
+  const getDashboardCounts = async () => {
+    try {
+      const response = await getData("dashboardCounts");
+      console.log("Dashboard Counts Response: ", response);
+      if (response?.success) {
+        // Matches your confirmed structure: { success: true, counts: { ... } }
+        setCounts(response.counts || response.data || {});
+      } else if (response && typeof response === "object" && !response.hasOwnProperty('success')) {
+        // Fallback for direct object response
+        setCounts(response);
+      }
+    } catch (error) {
+      console.log("Error fetching dashboard counts:", error);
+    }
+  };
 
   const getSalesDataByAPI = async () => {
     const endpoint = "/getAllSales";
@@ -39,77 +47,94 @@ const Home = () => {
       };
 
       const response = await postData(endpoint, payload);
-      // console.log("response:dddddddddddddddd ", response);
+      console.log("Sales Data Response: ", response);
 
       if (response?.data?.success) {
         setSalesData(response?.data?.data);
       }
-
-      // store data in session for  later use
     } catch (error) {
-      console.log("error: ", error);
+      console.log("Error fetching sales data: ", error);
     }
   };
+
+  useEffect(() => {
+    getSalesDataByAPI();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dropdownData]);
+
+  useEffect(() => {
+    getDashboardCounts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const DashboardCardData = [
     {
       label: "Total Products",
-      count: '1',
-      // count: salesData?.totalProducts || '1',
-      icon: <FaUsers size={28} color="#0077b6" />,
+      count: counts?.totalProducts || salesData?.totalProducts || "0",
+      icon: <FaBox size={28} color="#0077b6" />,
       cardColor: "bg-light-blue-color",
       circleColor: "dashboard-blue-color",
     },
     {
       label: "Total Sales",
-      count: salesData?.summary?.total_sales ?? "0",
+      count: counts?.totalSales || salesData?.summary?.total_sales || "0",
       icon: <FiTrendingUp size={28} color="#6ba368" />,
       cardColor: "bg-light-green-color",
       circleColor: "dashboard-green-color",
     },
     {
-      label: "Total Order",
-      count: salesData?.totalOrders ?? "0",
+      label: "Total Orders",
+      count: counts?.totalOrders || salesData?.totalOrders || "0",
       icon: <FaShoppingCart size={28} color="#e86a33" />,
       cardColor: "bg-light-yellow-color",
       circleColor: "dashboard-yellow-color",
     },
     {
-      label: "Total Profit",
-      count: salesData?.monthlyProfit ?? "0",
-      icon: <FaRupeeSign size={28} color="#6a0dad" />,
+      label: "Customers",
+      count: counts?.customers || "0",
+      icon: <FaUsers size={28} color="#0077b6" />,
+      cardColor: "bg-light-blue-color",
+      circleColor: "dashboard-blue-color",
+    },
+    {
+      label: "B2B Inquiries",
+      count: (counts?.b2bInquiry !== undefined ? counts.b2bInquiry : "0"),
+      icon: <FaBriefcase size={28} color="#6a0dad" />,
+      cardColor: "bg-light-purple-color",
+      circleColor: "dashboard-purple-color",
+    },
+    {
+      label: "Contacts",
+      count: (counts?.contact !== undefined ? counts.contact : "0"),
+      icon: <FaEnvelope size={28} color="#e86a33" />,
+      cardColor: "bg-light-yellow-color",
+      circleColor: "dashboard-yellow-color",
+    },
+    {
+      label: "Newsletters",
+      count: (counts?.newsletter !== undefined ? counts.newsletter : "0"),
+      icon: <FaNewspaper size={28} color="#6ba368" />,
+      cardColor: "bg-light-green-color",
+      circleColor: "dashboard-green-color",
+    },
+    {
+      label: "Offer Banners",
+      count: (counts?.offerBanner !== undefined ? counts.offerBanner : "0"),
+      icon: <FaTag size={28} color="#0077b6" />,
+      cardColor: "bg-light-blue-color",
+      circleColor: "dashboard-blue-color",
+    },
+    {
+      label: "Feedback",
+      count: (counts?.feedback !== undefined ? counts.feedback : "0"),
+      icon: <FaComment size={28} color="#6a0dad" />,
       cardColor: "bg-light-purple-color",
       circleColor: "dashboard-purple-color",
     },
   ];
 
 
-  // const handleImageUpload = (e) => {
-  //   const files = Array.from(e.target.files);
-  //   const newImages = files.map(file => URL.createObjectURL(file));
-  //   setImages(prev => [...prev, ...newImages]);
-  // };
 
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    const validImageTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-
-    const newImages = [];
-    for (let file of files) {
-      if (validImageTypes.includes(file.type)) {
-        newImages.push(URL.createObjectURL(file));
-      } else {
-        setError(`Invalid file type: ${file.name}`);
-        setTimeout(() => setError(""), 3000); // clear error after 3 sec
-      }
-    }
-
-    setImages(prev => [...prev, ...newImages]);
-  };
-
-  const handleImageDelete = (indexToDelete) => {
-    setImages(prev => prev.filter((_, index) => index !== indexToDelete));
-  };
 
   return (
     <div className="container-fluid gauswarn-bg-color">

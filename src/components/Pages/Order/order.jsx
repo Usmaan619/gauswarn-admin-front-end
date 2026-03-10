@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import OrderTable from "../../Common/OrderTable/ordertable";
 import SideBar from "../../Common/SideBar/sidebar";
 import Navbar from "../../Common/Navbar/navbar";
@@ -18,11 +18,7 @@ const Order = () => {
   const [orders, setOrders] = useState([]);
   console.log("orders: ", orders);
 
-  useEffect(() => {
-    getOrderAPI();
-  }, []);
-
-  const getOrderAPI = async () => {
+  const getOrderAPI = useCallback(async () => {
     const endpoint = "getAllOrderDetails";
     try {
       const response = await getData(endpoint);
@@ -30,7 +26,11 @@ const Order = () => {
     } catch (error) {
       console.log("error: ", error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    getOrderAPI();
+  }, [getOrderAPI]);
   return (
     <>
       <div className="container-fluid gauswarn-bg-color  min-vh-100 ">

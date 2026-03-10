@@ -242,7 +242,7 @@ const Login = () => {
                     },
                     pattern: {
                       value:
-                        /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).{6,}$/,
+                        /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{6,}$/,
                       message:
                         "Must include 1 capital letter and 1 special character",
                     },

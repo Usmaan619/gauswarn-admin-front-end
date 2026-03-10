@@ -199,7 +199,7 @@ const Forgot = () => {
                     },
                     pattern: {
                       // one uppercase, one special char, min 6 chars total
-                      value: /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]).{6,}$/,
+                      value: /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{6,}$/,
                       message:
                         "Must include 1 capital letter and 1 special character",
                     },

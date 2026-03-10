@@ -6,13 +6,13 @@ import Pagination from "react-bootstrap/Pagination";
 
 import { toastError, toastSuccess } from "../../../Services/toast.service";
 import CreateAdminUserModal from "./CreateAdminUserModal";
-import { Search, UserPlus, Edit2, Trash2, Users } from "lucide-react";
+import { UserPlus, Edit2, Trash2, Users } from "lucide-react";
 
 const GauswarnUsersTable = () => {
   const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editUser, setEditUser] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 

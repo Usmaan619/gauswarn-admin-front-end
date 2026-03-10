@@ -22,7 +22,7 @@ const BlogCreate = () => {
     if (image) fd.append("image", image);
 
     try {
-      const res = await postFormData("/blogs", fd);
+      await postFormData("/blogs", fd);
       toast.success("Blog Created!");
 
       navigate("/blog/list");

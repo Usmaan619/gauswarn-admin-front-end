@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Sidebar from "../../Common/SideBar/sidebar";
 import Navbar from "../../Common/Navbar/navbar";
 
@@ -15,23 +15,23 @@ const Inquiry = () => {
     status: "",
   });
 
-  useEffect(() => {
-    getInquiriesAPI();
+  const getInquiriesAPI = useCallback(async () => {
+    try {
+      const endpoint = `getb2bInquiries?page=${filters.page}&limit=${filters.limit}&search=${filters.search}&status=${filters.status}`;
+      const response = await getData(endpoint);
+
+      if (response?.success) {
+        setInquiries(response.data || []);
+        setPagination(response.pagination);
+      }
+    } catch (error) {
+      console.log("Inquiry Fetch Error:", error);
+    }
   }, [filters]);
 
- const getInquiriesAPI = async () => {
-  try {
-    const endpoint = `getb2bInquiries?page=${filters.page}&limit=${filters.limit}&search=${filters.search}&status=${filters.status}`;
-    const response = await getData(endpoint);
-
-    if (response?.success) {
-      setInquiries(response.data || []);
-      setPagination(response.pagination);
-    }
-  } catch (error) {
-    console.log("Inquiry Fetch Error:", error);
-  }
-};
+  useEffect(() => {
+    getInquiriesAPI();
+  }, [getInquiriesAPI]);
 
 
   return (

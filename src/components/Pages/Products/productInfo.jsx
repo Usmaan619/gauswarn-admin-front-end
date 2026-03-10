@@ -277,7 +277,7 @@
 
 // export default ProductInfo;
 
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import Sidebar from "../../Common/SideBar/sidebar";
 import Navbar from "../../Common/Navbar/navbar";
 import { getData, postData, postFormData } from "../../Common/APIs/api";
@@ -287,11 +287,8 @@ import { useForm, useFieldArray } from "react-hook-form";
 const ProductInfo = () => {
   const {
     control,
-    handleSubmit,
-    reset,
     register,
     getValues,
-    formState: { errors },
   } = useForm({
     defaultValues: {
       products: [],
@@ -303,11 +300,7 @@ const ProductInfo = () => {
     name: "products",
   });
 
-  useEffect(() => {
-    getProductAPI();
-  }, []);
-
-  const getProductAPI = async () => {
+  const getProductAPI = useCallback(async () => {
     const endpoint = "gauswarnGetAllProduct";
     try {
       const response = await getData(endpoint);
@@ -317,7 +310,11 @@ const ProductInfo = () => {
     } catch (error) {
       console.log("API error: ", error);
     }
-  };
+  }, [replace]);
+
+  useEffect(() => {
+    getProductAPI();
+  }, [getProductAPI]);
 
   const handleImageReplace = async (productIndex, replaceIndex, file) => {
     const allData = getValues();

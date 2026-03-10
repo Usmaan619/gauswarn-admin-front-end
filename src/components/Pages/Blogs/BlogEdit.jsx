@@ -11,15 +11,14 @@ const BlogEdit = () => {
   const [blog, setBlog] = useState(null);
   const [image, setImage] = useState(null);
 
-  const loadBlog = async () => {
-    const res = await getData("blogs");
-    const found = res.blogs.find((x) => x.id == id);
-    setBlog(found);
-  };
-
   useEffect(() => {
+    const loadBlog = async () => {
+      const res = await getData("blogs");
+      const found = res.blogs.find((x) => String(x.id) === String(id));
+      setBlog(found);
+    };
     loadBlog();
-  }, []);
+  }, [id]);
 
   if (!blog) return <h2>Loading...</h2>;
 
@@ -52,7 +51,7 @@ const BlogEdit = () => {
         setContent={(v) => setBlog({ ...blog, content: v })}
       />
 
-      <img src={blog.image_url} className="img-fluid mb-3" />
+      <img src={blog.image_url} className="img-fluid mb-3" alt="Blog preview" />
 
       <input
         type="file"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Sidebar from "../../Common/SideBar/sidebar";
 import Navbar from "../../Common/Navbar/navbar";
 import CustomerTable from "../../Common/CustomerTable/customerTable";
@@ -6,11 +6,7 @@ import { getData } from "../../Common/APIs/api";
 const Customer = () => {
   const [customer, setCustomers] = useState([]);
 
-  useEffect(() => {
-    getCustomerAPI();
-  }, []);
-
-  const getCustomerAPI = async () => {
+  const getCustomerAPI = useCallback(async () => {
     const endpoint = "/getAllCustomer";
     try {
       const response = await getData(endpoint);
@@ -18,7 +14,11 @@ const Customer = () => {
     } catch (error) {
       console.log("error: ", error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    getCustomerAPI();
+  }, [getCustomerAPI]);
   console.log("customer: ", customer);
 
   return (

@@ -1,16 +1,13 @@
 import React, { useState } from "react";
-import Dropdown from "react-bootstrap/Dropdown";
 import Pagination from "react-bootstrap/Pagination";
 import {
   IoIosSearch,
   IoIosArrowRoundForward,
   IoIosArrowRoundBack,
-  IoIosArrowDown,
 } from "react-icons/io";
 import { IoEyeOutline } from "react-icons/io5";
 import { PiPencilSimple } from "react-icons/pi";
 import { RiDeleteBinLine } from "react-icons/ri";
-import { GoPlus } from "react-icons/go";
 import { NavLink } from "react-router-dom";
 
 
@@ -20,7 +17,7 @@ import { NavLink } from "react-router-dom";
 const CustomerTable = ({ CustomerData }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedFilter, setSelectedFilter] = useState("All");
+  const selectedFilter = "All"; // Temporary fix for unused setSelectedFilter
 
   const itemsPerPage = 8;
 

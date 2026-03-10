@@ -6,7 +6,7 @@ import moment from "moment/moment";
 
 const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [statusFilter, setStatusFilter] = useState("");
+  const [statusFilter] = useState("");
   const [paymentFilter, setPaymentFilter] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [viewData, setViewData] = useState(null);

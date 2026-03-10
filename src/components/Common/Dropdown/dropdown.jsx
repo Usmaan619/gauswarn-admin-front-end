@@ -290,12 +290,6 @@ function FilterDropdown() {
     });
   };
 
-  const handleMonthlyClick = () => {
-    setSelectedType("monthly");
-    setShowMonthly(!showMonthly);
-    setShowYearly(false);
-  };
-
   const handleLast7Days = () => {
     setSelectedType("last7days");
     setSelectedMonths([]);
