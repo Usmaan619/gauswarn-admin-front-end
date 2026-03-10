@@ -1,6 +1,6 @@
 import React from "react";
 import "./productCards.css";
-import Product1 from "../../Assets/Images/topProduct/jaggeryt.svg"; // Importing sample product image
+ // Importing sample product image
 
 // Sample list of top products with repeated dummy data
 const products = [

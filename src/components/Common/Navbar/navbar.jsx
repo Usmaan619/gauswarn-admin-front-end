@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 // Common Components
@@ -6,11 +6,11 @@ import { clearCache, getItem } from "../../../Services/storage.service";
 import "./navbar.css";
 
 // Import Third Party Components
-import { FaExchangeAlt, FaChevronDown } from "react-icons/fa";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { FaChevronDown } from "react-icons/fa";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // images
-import profile from "../../Assets/Images/navbar/User-60.svg";
+
 import { UserContext } from "../../../Context/UserContext";
 
 const Navbar = () => {
@@ -20,9 +20,7 @@ const Navbar = () => {
   // Check current route
   const isRajlaxmi = location.pathname.startsWith("/rajlaxmi");
 
-  // Decide title and link dynamically
-  const title = isRajlaxmi ? "Gauswarn Dashboard" : "Rajlaxmi Dashboard";
-  const linkTo = isRajlaxmi ? "/home" : "/rajlaxmi";
+
   const { setUserLogin } = useContext(UserContext);
 
   const handleLogout = () => {
@@ -43,7 +41,7 @@ const Navbar = () => {
           data-bs-toggle="modal"
           data-bs-target="#profileModal"
         >
-          <img src={profile} alt="Profile" className="profile-img me-2" />
+          <div className="bg-light rounded-circle d-flex align-items-center justify-content-center border" style={{width: "40px", height: "40px", marginRight: "10px"}}><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg></div>
           <span className="username me-1 text-capitalize">
             {" "}
             {getItem("name") ? getItem("name") : ""}
@@ -62,13 +60,7 @@ const Navbar = () => {
             <div className="modal-content border-0 p-0">
               <ul className="list-unstyled mb-0">
                 <li className="px-3 py-3 text-center">
-                  <img
-                    src={profile}
-                    alt="avatar"
-                    className="rounded-circle mb-2"
-                    width="50"
-                    height="50"
-                  />
+                  <div className="bg-light rounded-circle d-flex align-items-center justify-content-center border" style={{width: "40px", height: "40px", marginRight: "10px"}}><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg></div>
                   <h6 className="mb-0 text-uppercase">
                     {" "}
                     {getItem("name") ? getItem("name") : ""}

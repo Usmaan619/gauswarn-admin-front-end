@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./feebdack.css";
-import itemavatar from "../../Assets/Images/customer-img/user.jpg";
+
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FaStar } from "react-icons/fa";
 import { deleteData } from "../APIs/api";
@@ -33,13 +33,7 @@ const FeedbackCard = React.memo(({ data, onDelete }) => {
             <div className="feedback-card bg-white p-3 box-shadow d-flex flex-column justify-content-between">
               <div className="d-flex justify-content-between align-items-start flex-wrap">
                 <div className="d-flex gap-3 align-items-center">
-                  <img
-                    src={itemavatar}
-                    alt="avatar"
-                    className="rounded-circle"
-                    width="40"
-                    height="40"
-                  />
+                  <div className="bg-light rounded-circle d-flex align-items-center justify-content-center border" style={{width: "30px", height: "30px"}}><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="15" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"></path></svg></div>
                   <div>
                     <div className="inter-font-family-600 font-14 text-murmaid-color name-text">
                       {item?.name}

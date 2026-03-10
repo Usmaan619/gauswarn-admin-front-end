@@ -6,7 +6,7 @@ import { IoIosSearch, IoIosArrowRoundForward, IoIosArrowRoundBack, IoIosArrowDow
 import { IoEyeOutline } from "react-icons/io5";
 import { PiPencilSimple } from "react-icons/pi";
 import { RiDeleteBinLine } from "react-icons/ri";
-import Product1 from "../../Assets/Images/Products-img/Mask group.svg";
+
 import { GoPlus } from 'react-icons/go';
 
 
@@ -126,7 +126,7 @@ const ProductTable = () => {
                     <div className='d-flex align-items-center'>
                      <input type="checkbox" className={`custom-checkbox me-3 ${isRajlaxmi ? 'add-btn-rajlaxmi' : 'add-btn-gauswarn'}`} />
 
-                      <img src={Product1} alt="Product" className='mx-2' />
+                      <div className="bg-light rounded d-flex align-items-center justify-content-center border" style={{width: "100%", height: "100px"}}><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="40" width="40" xmlns="http://www.w3.org/2000/svg"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg></div>
                       {product.product_name}
                     </div>
                   </td>

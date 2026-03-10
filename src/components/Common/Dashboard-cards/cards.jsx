@@ -1,10 +1,10 @@
 import React from "react";
 
 // import images
-// import Team from "../../Assets/Images/home-img/team.svg";
-// import Trend from "../../Assets/Images/home-img/trend.svg";
-// import Rupee from "../../Assets/Images/home-img/Rupee.svg";
-// import Cart from "../../Assets/Images/home-img/shopping-cart.svg";
+
+
+
+
 
 const DashboardCards = ({ cardData }) => {
   // const cardData = [
