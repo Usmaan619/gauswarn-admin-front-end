@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkrajlaxmi_admin=self.webpackChunkrajlaxmi_admin||[]).push([[233],{3233(a,c,e){e.d(c,{A:()=>i});e(5043);const i=e.p+"static/media/rajlaxmi.9039cca357f4d88235937c687a1e6fe9.svg"}}]);
+//# sourceMappingURL=233.aab0b3c6.chunk.js.map
