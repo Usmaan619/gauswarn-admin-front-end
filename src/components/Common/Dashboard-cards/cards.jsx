@@ -2,10 +2,6 @@ import React from "react";
 
 // import images
 
-
-
-
-
 const DashboardCards = ({ cardData }) => {
   // const cardData = [
   //     { label: 'Total Products', count: '0', imgSrc: Team, cardColor: "bg-light-blue-color", circleColor: "dashboard-blue-color" },
@@ -25,7 +21,11 @@ const DashboardCards = ({ cardData }) => {
                   <div
                     className={`rounded-circle dashboard-img-circle ${card.circleColor} d-flex align-items-center justify-content-center`}
                   >
-                    {card.icon ? <span className="fs-1">{card.icon}</span> : <img src={card.imgSrc} alt="Loading" />}
+                    {card.icon ? (
+                      <span className="fs-1">{card.icon}</span>
+                    ) : (
+                      <img src={card.imgSrc} alt="Loading" />
+                    )}
                   </div>
                 </div>
                 <div className="col-lg-9 col-md-9 col-9 text-center">

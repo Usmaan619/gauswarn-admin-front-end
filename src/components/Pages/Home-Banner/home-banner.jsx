@@ -1,9 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
-import Sidebar from "../../Common/SideBar/sidebar";
-import Navbar from "../../Common/Navbar/navbar";
 import { getData, postFormData } from "../../Common/APIs/api";
 import { toastSuccess, toastError } from "../../../Services/toast.service";
-import "./BannerManager.css";
+import { FiImage, FiUpload, FiCheckCircle, FiAlertCircle, FiInfo } from "react-icons/fi";
 
 const BannerManager = () => {
   const [banners, setBanners] = useState({
@@ -83,112 +81,100 @@ const BannerManager = () => {
     }
   };
 
-  const getUploadStatus = (slot) => {
-    if (loading) return "loading";
-    if (uploading === slot) return "uploading";
-    return "idle";
-  };
-
   if (loading) {
     return (
-      <div className="container-fluid px-4 gauswarn-bg-color min-vh-100">
-        <Navbar />
-        <div className="row">
-          <div className="col-lg-2">
-            <Sidebar />
-          </div>
-          <div className="col-lg-10 px-lg-5 py-4">
-            <div className="banner-loading">
-              <div className="banner-spinner"></div>
-              <p className="banner-loading-text">Loading banners...</p>
-            </div>
-          </div>
-        </div>
+      <div className="text-center py-5">
+        <div className="spinner-border text-info" role="status"></div>
+        <p className="mt-3 text-secondary">Synchronizing banners...</p>
       </div>
     );
   }
 
   return (
-    <div className="container-fluid px-4 gauswarn-bg-color min-vh-100">
-      <Navbar />
-      <div className="row">
-        <div className="col-lg-2">
-          <Sidebar />
-        </div>
+    <div className="banner-manager-page fade-in">
+      <div className="page-header mb-4">
+        <h2 className="glow-text d-flex align-items-center gap-2">
+          <FiImage className="text-info" />
+          Homepage Banners
+        </h2>
+        <p className="text-secondary">Control the primary visual assets of your website's main landing page.</p>
+      </div>
 
-        <div className="col-lg-10 px-lg-5 py-4">
-          {/* Page Header */}
-          <div className="banner-header">
-            <h1 className="banner-title">Homepage Banners</h1>
-            <p className="banner-subtitle">
-              Manage your website's promotional banners (4 slots)
-            </p>
-          </div>
+      <div className="row g-4 mb-4">
+        {[1, 2, 3, 4].map((slot) => {
+          const isUploading = uploading === slot;
+          const bannerUrl = banners[`banner${slot}`];
+          const hasBanner = !!bannerUrl;
 
-          {/* Banner Grid */}
-          <div className="banner-grid">
-            {[1, 2, 3, 4].map((slot) => {
-              const status = getUploadStatus(slot);
-              const hasBanner = !!banners[`banner${slot}`];
-
-              return (
-                <div key={slot} className="banner-card">
-                  <div className="banner-card-header">
-                    <h3 className="banner-card-title">Banner {slot}</h3>
-                    {hasBanner && (
-                      <span className="banner-card-badge">Active</span>
-                    )}
-                  </div>
-
-                  <div className="banner-card-body">
-                    {hasBanner ? (
-                      <div className="banner-image-wrapper">
-                        <img
-                          src={banners[`banner${slot}`]}
-                          className="banner-image"
-                        />
-                        <div className="banner-image-overlay"></div>
-                      </div>
-                    ) : (
-                      <div className="banner-placeholder">
-                        <p>No banner set</p>
-                      </div>
-                    )}
-
-                    <div className="banner-upload">
-                      <input
-                        type="file"
-                        id={`banner-${slot}`}
-                        className="banner-file-input"
-                        onChange={(e) => updateBanner(slot, e.target.files[0])}
-                      />
-
-                      <label
-                        htmlFor={`banner-${slot}`}
-                        className="banner-upload-btn"
-                      >
-                        {status === "uploading"
-                          ? "Uploading..."
-                          : hasBanner
-                          ? "Replace Banner"
-                          : "Upload Banner"}
-                      </label>
-                    </div>
-                  </div>
+          return (
+            <div key={slot} className="col-md-6 col-xl-3">
+              <div className="glass-card h-100 overflow-hidden d-flex flex-column">
+                <div className="p-3 border-bottom border-light d-flex justify-content-between align-items-center">
+                  <span className="fw-bold small uppercase">Slot {slot}</span>
+                  {hasBanner ? 
+                    <FiCheckCircle className="text-success" /> : 
+                    <FiAlertCircle className="text-warning" />
+                  }
                 </div>
-              );
-            })}
-          </div>
+                
+                <div className="flex-grow-1 p-3">
+                  <div className="banner-preview-box rounded-3 glass-card mb-3 overflow-hidden" 
+                       style={{ height: '160px', background: 'rgba(255,255,255,0.02)' }}>
+                    {hasBanner ? (
+                      <img src={bannerUrl} alt={`Banner ${slot}`} className="w-100 h-100" style={{ objectFit: 'cover' }} />
+                    ) : (
+                      <div className="d-flex flex-column align-items-center justify-content-center h-100 opacity-20">
+                         <FiImage size={40} />
+                         <span className="small mt-2">No Image</span>
+                      </div>
+                    )}
+                  </div>
 
-          {/* Guidelines */}
-          <div className="banner-guidelines-card">
-            <h3 className="banner-guidelines-title">Banner Specifications</h3>
-
-            <div className="banner-guidelines-grid">
-              <div>1441×580px</div>
-              <div>JPG, PNG, WebP</div>
-              <div>Landscape ratio</div>
+                  <input
+                    type="file"
+                    id={`banner-file-${slot}`}
+                    className="d-none"
+                    onChange={(e) => updateBanner(slot, e.target.files[0])}
+                  />
+                  
+                  <button 
+                    className={`btn w-100 py-2 d-flex align-items-center justify-content-center gap-2 ${hasBanner ? 'btn-outline-info' : 'btn-info'}`}
+                    onClick={() => document.getElementById(`banner-file-${slot}`).click()}
+                    disabled={isUploading}
+                  >
+                    {isUploading ? (
+                      <div className="spinner-border spinner-border-sm" role="status"></div>
+                    ) : (
+                      <FiUpload size={16} />
+                    )}
+                    {isUploading ? "Uploading..." : hasBanner ? "Replace Image" : "Upload Banner"}
+                  </button>
+                </div>
+              </div>
             </div>
+          );
+        })}
+      </div>
+
+      <div className="glass-card p-4 d-flex align-items-start gap-3">
+        <div className="p-3 rounded-circle" style={{ background: 'rgba(59, 130, 246, 0.1)' }}>
+          <FiInfo className="text-info" size={24} />
+        </div>
+        <div>
+          <h5 className="text-white mb-2">Technical Specifications</h5>
+          <div className="row g-3 mt-1">
+             <div className="col-auto">
+               <span className="badge glass-card px-3 py-2 text-secondary fw-normal">Resolution: <strong className="text-white">1441 × 580px</strong></span>
+             </div>
+             <div className="col-auto">
+               <span className="badge glass-card px-3 py-2 text-secondary fw-normal">Max Size: <strong className="text-white">10 MB</strong></span>
+             </div>
+             <div className="col-auto">
+               <span className="badge glass-card px-3 py-2 text-secondary fw-normal">Formats: <strong className="text-white">JPG, PNG, WebP</strong></span>
+             </div>
+             <div className="col-auto">
+               <span className="badge glass-card px-3 py-2 text-secondary fw-normal">Aspect Ratio: <strong className="text-white">Landscape</strong></span>
+             </div>
           </div>
         </div>
       </div>

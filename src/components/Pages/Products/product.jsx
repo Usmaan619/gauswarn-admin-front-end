@@ -1,26 +1,22 @@
-import React from 'react'
-import ProductTable from '../../Common/ProductTable/productTable';
-import Sidebar from'../../Common/SideBar/sidebar';
-import Navbar from '../../Common/Navbar/navbar';
+import React from "react";
+import ProductTable from "../../Common/ProductTable/productTable";
+import { FiPackage } from "react-icons/fi";
 
 const Product = () => {
   return (
-    <>
-      <div className='container-fluid px-4 gauswarn-bg-color'>
-          <Navbar />
-        <div className='row'>
-          <div className='col-lg-2'>
-            <Sidebar />
-          </div>
-          
-          <div className='col-lg-10 px-lg-5'>
-            {/* <p className='inter-font-family-500 font-20 text-drak-blue-colo'>Navbar</p> */}
-            <ProductTable />
-          </div>
-        </div>
-
+    <div className="product-list-page fade-in">
+      <div className="page-header mb-4">
+        <h2 className="glow-text d-flex align-items-center gap-2">
+          <FiPackage className="text-info" />
+          Product Inventory
+        </h2>
+        <p className="text-secondary">View and manage your entire product catalog, stock levels, and variants.</p>
       </div>
-    </>
+
+      <div className="glass-card p-4">
+        <ProductTable />
+      </div>
+    </div>
   );
 };
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Sidebar from "../../Common/SideBar/sidebar";
-import Navbar from "../../Common/Navbar/navbar";
 import CustomerTable from "../../Common/CustomerTable/customerTable";
 import { getData } from "../../Common/APIs/api";
+import { FiUsers } from "react-icons/fi";
+
 const Customer = () => {
   const [customer, setCustomers] = useState([]);
 
@@ -16,25 +16,24 @@ const Customer = () => {
       const response = await getData(endpoint);
       if (response?.success) setCustomers(response?.customers || []);
     } catch (error) {
-      console.log("error: ", error);
+      console.error("Error fetching customers: ", error);
     }
   };
-  console.log("customer: ", customer);
 
   return (
-    <>
-      <div className="container-fluid gauswarn-bg-color  min-vh-100">
-        <Navbar />
-        <div className="row">
-          <div className="col-lg-2">
-            <Sidebar />
-          </div>
-          <div className="col-lg-10 px-lg-5">
-            <CustomerTable CustomerData={customer} />
-          </div>
-        </div>
+    <div className="customer-page fade-in">
+      <div className="page-header mb-4">
+        <h2 className="glow-text d-flex align-items-center gap-2">
+          <FiUsers className="text-info" />
+          Customer Database
+        </h2>
+        <p className="text-secondary">Manage and review your complete customer base and their shopping history.</p>
       </div>
-    </>
+
+      <div className="glass-card p-4">
+        <CustomerTable CustomerData={customer} />
+      </div>
+    </div>
   );
 };
 

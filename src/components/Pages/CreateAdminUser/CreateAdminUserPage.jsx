@@ -1,22 +1,20 @@
 import React from "react";
-import Navbar from "../../Common/Navbar/navbar";
-import SideBar from "../../Common/SideBar/sidebar";
 import GauswarnUsersTable from "./GauswarnUsersTable";
+import { FiUsers } from "react-icons/fi";
 
 const CreateAdminUserPage = () => {
   return (
-    <div className="container-fluid gauswarn-bg-color min-vh-100">
-      <Navbar />
+    <div className="admin-users-page fade-in">
+      <div className="page-header mb-4">
+        <h2 className="glow-text d-flex align-items-center gap-2">
+          <FiUsers className="text-info" />
+          Admin User Management
+        </h2>
+        <p className="text-secondary">Create and manage administrative staff accounts and their permissions.</p>
+      </div>
 
-      <div className="row">
-        <div className="col-lg-2">
-          <SideBar />
-        </div>
-
-        <div className="col-lg-10 px-lg-5">
-          <h3 className="my-4">Create Admin User</h3>
-          <GauswarnUsersTable />
-        </div>
+      <div className="glass-card p-4">
+        <GauswarnUsersTable />
       </div>
     </div>
   );

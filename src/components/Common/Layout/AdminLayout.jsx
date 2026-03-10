@@ -1,19 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../Navbar/navbar";
-import SideBar from "../SideBar/sidebar";
+import Sidebar from "../SideBar/sidebar";
+import "../../../styles/design-system.css";
 
 const AdminLayout = ({ title = "Dashboard" }) => {
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
   return (
-    <div className="container-fluid gauswarn-bg-color p-0 m-0">
-      <Navbar title={title} />
-      <div className="row m-0">
-        <div className="col-lg-2 p-0">
-          <SideBar />
-        </div>
-        <div className="col-lg-10 px-lg-5 d-flex justify-content-center flex-column">
+    <div className="admin-main-wrapper gauswarn-bg-color">
+      <Sidebar 
+        isCollapsed={isSidebarCollapsed} 
+        setIsCollapsed={setIsSidebarCollapsed} 
+      />
+      <div 
+        className={`admin-content-area ${isSidebarCollapsed ? "sidebar-collapsed" : ""}`}
+      >
+        <Navbar 
+          title={title} 
+          isSidebarCollapsed={isSidebarCollapsed}
+        />
+        <main className="dashboard-content fade-in mt-4">
           <Outlet />
-        </div>
+        </main>
       </div>
     </div>
   );

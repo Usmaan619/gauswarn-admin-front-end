@@ -34,6 +34,8 @@ const NewsletterPage = lazy(() => import("../components/Pages/Newsletter/Newslet
 const CreateAdminUserPage = lazy(() => import("../components/Pages/CreateAdminUser/CreateAdminUserPage.jsx"));
 const OfferManagement = lazy(() => import("../components/OfferManagement/OfferManagement.jsx"));
 
+const AdminLayout = lazy(() => import("../components/Common/Layout/AdminLayout.jsx"));
+
 const AuthRoutes = () => {
   const { UserLogin, setUserLogin } = useContext(UserContext);
 
@@ -51,9 +53,10 @@ const AuthRoutes = () => {
           <>
             <Route path="/" element={<Login />} />
             <Route path="/forgot" element={<Forgot />} />
+            <Route path="*" element={<Login />} />
           </>
         ) : (
-          <>
+          <Route element={<AdminLayout />}>
             {/* Gauswarn Routes */}
             <Route path="/home" element={<Home />} />
             <Route path="/order" element={<Order />} />
@@ -79,13 +82,10 @@ const AuthRoutes = () => {
             <Route path="/blog/view/:slug" element={<BlogView />} />
             <Route path="/blog/edit/:id" element={<BlogEdit />} />
 
+            <Route path="/" element={<Home />} />
             <Route path="*" element={<Error />} />
-          </>
+          </Route>
         )}
-
-        {/* Fallback route */}
-
-        <Route path="/" element={UserLogin ? <Home /> : <Login />} />
       </Routes>
     </Suspense>
   );

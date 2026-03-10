@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import OrderTable from "../../Common/OrderTable/ordertable";
-import SideBar from "../../Common/SideBar/sidebar";
-import Navbar from "../../Common/Navbar/navbar";
 import { getData } from "../../Common/APIs/api";
+
 const Order = () => {
   const OrderHeadings = [
     "Order ID",
@@ -16,7 +15,6 @@ const Order = () => {
   ];
 
   const [orders, setOrders] = useState([]);
-  console.log("orders: ", orders);
 
   useEffect(() => {
     getOrderAPI();
@@ -28,28 +26,25 @@ const Order = () => {
       const response = await getData(endpoint);
       if (response?.success) setOrders(response?.orderDetails || []);
     } catch (error) {
-      console.log("error: ", error);
+      console.error("error fetching orders: ", error);
     }
   };
+
   return (
-    <>
-      <div className="container-fluid gauswarn-bg-color  min-vh-100 ">
-        <Navbar />
-        <div className="row">
-          <div className="col-lg-2">
-            <SideBar />
-          </div>
-          <div className="col-lg-10 px-lg-5">
-            {/* <p className='inter-font-family-500 font-20 text-drak-blue-colo'>Navbar</p> */}
-            <OrderTable
-              ordersData={orders}
-              headings={OrderHeadings}
-              refresh={getOrderAPI}
-            />
-          </div>
-        </div>
+    <div className="orders-page fade-in">
+      <div className="page-header mb-4">
+        <h2 className="glow-text">Orders Management</h2>
+        <p className="text-secondary">View and manage all customer orders from here.</p>
       </div>
-    </>
+      
+      <div className="glass-card p-4">
+        <OrderTable
+          ordersData={orders}
+          headings={OrderHeadings}
+          refresh={getOrderAPI}
+        />
+      </div>
+    </div>
   );
 };
 

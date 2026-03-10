@@ -1,35 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
-import SideBar from "../../Common/SideBar/sidebar";
-import DashboardCards from "../../Common/Dashboard-cards/cards";
-import RecentOrderTable from "../../Common/Recent-order-table/recentOrder";
-import CustomerCards from "../../Common/CustomerCards/customercards";
-import Navbar from "../../Common/Navbar/navbar";
-import DropDowns from "../../Common/Dropdown/dropdown";
-import BarChart from "../../Common/Graph/Graph";
-
-// icons
-import { FaUsers, FaShoppingCart, FaRupeeSign } from "react-icons/fa";
-import { FiTrendingUp } from "react-icons/fi";
-
-import { getData, postData } from "../../Common/APIs/api";
+import "./home.css";
+import { FiTrendingUp, FiShoppingBag, FiUsers, FiMessageSquare, FiMail, FiStar, FiPackage } from "react-icons/fi";
+import Chart from "react-apexcharts";
 import { DropdownContext } from "../../../Context/DropdownContext";
-import { RxCrossCircled } from "react-icons/rx";
-import { ImFolderUpload } from "react-icons/im";
+import { postData } from "../../Common/APIs/api";
 
-const Home = () => {
-  const [images, setImages] = useState([]);
-  const [error, setError] = useState("");
-
+const DashboardHome = () => {
   const { dropdownData } = useContext(DropdownContext);
+  const [salesData, setSalesData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getSalesDataByAPI();
+    fetchDashboardData();
   }, [dropdownData]);
 
-  const [salesData, setSalesData] = useState();
-  console.log("salesDataaaaaa: ", salesData);
-
-  const getSalesDataByAPI = async () => {
+  const fetchDashboardData = async () => {
+    setLoading(true);
     const endpoint = "/getAllSales";
     try {
       const payload = {
@@ -37,175 +23,128 @@ const Home = () => {
         month: dropdownData.month,
         year: dropdownData.year,
       };
-
       const response = await postData(endpoint, payload);
-      // console.log("response:dddddddddddddddd ", response);
-
       if (response?.data?.success) {
-        setSalesData(response?.data?.data);
+        setSalesData(response.data.data);
       }
-
-      // store data in session for  later use
     } catch (error) {
-      console.log("error: ", error);
+      console.error("Error fetching dashboard data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const DashboardCardData = [
-    {
-      label: "Total Products",
-      count: '1',
-      // count: salesData?.totalProducts || '1',
-      icon: <FaUsers size={28} color="#0077b6" />,
-      cardColor: "bg-light-blue-color",
-      circleColor: "dashboard-blue-color",
-    },
-    {
-      label: "Total Sales",
-      count: salesData?.summary?.total_sales ?? "0",
-      icon: <FiTrendingUp size={28} color="#6ba368" />,
-      cardColor: "bg-light-green-color",
-      circleColor: "dashboard-green-color",
-    },
-    {
-      label: "Total Order",
-      count: salesData?.totalOrders ?? "0",
-      icon: <FaShoppingCart size={28} color="#e86a33" />,
-      cardColor: "bg-light-yellow-color",
-      circleColor: "dashboard-yellow-color",
-    },
-    {
-      label: "Total Profit",
-      count: salesData?.monthlyProfit ?? "0",
-      icon: <FaRupeeSign size={28} color="#6a0dad" />,
-      cardColor: "bg-light-purple-color",
-      circleColor: "dashboard-purple-color",
-    },
+  const stats = [
+    { label: "Total Orders", value: salesData?.totalOrders || "0", icon: <FiShoppingBag />, change: "+12.5%", color: "#00d2ff" },
+    { label: "Total Products", value: salesData?.totalProducts || "45", icon: <FiPackage />, change: "+3.2%", color: "#00d2ff" },
+    { label: "Total Customers", value: salesData?.totalUsers || "1.2k", icon: <FiUsers />, change: "+18.7%", color: "#00d2ff" },
+    { label: "Revenue", value: `\u20B9${salesData?.summary?.total_sales || "0"}`, icon: <FiTrendingUp />, change: "+24.1%", color: "#00d2ff" },
+    { label: "Inquiries", value: "24", icon: <FiMessageSquare />, change: "+5.4%", color: "#00d2ff" },
+    { label: "Subscribers", value: "850", icon: <FiMail />, change: "+10.2%", color: "#00d2ff" },
+    { label: "Feedbacks", value: "128", icon: <FiStar />, change: "+2.1%", color: "#00d2ff" },
   ];
 
-
-  // const handleImageUpload = (e) => {
-  //   const files = Array.from(e.target.files);
-  //   const newImages = files.map(file => URL.createObjectURL(file));
-  //   setImages(prev => [...prev, ...newImages]);
-  // };
-
-  const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    const validImageTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-
-    const newImages = [];
-    for (let file of files) {
-      if (validImageTypes.includes(file.type)) {
-        newImages.push(URL.createObjectURL(file));
-      } else {
-        setError(`Invalid file type: ${file.name}`);
-        setTimeout(() => setError(""), 3000); // clear error after 3 sec
+  const chartOptions = {
+    chart: {
+      type: 'area',
+      background: 'transparent',
+      toolbar: { show: false },
+      sparkline: { enabled: false },
+    },
+    colors: ['#00d2ff'],
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.45,
+        opacityTo: 0.05,
+        stops: [20, 100, 100, 100]
       }
-    }
-
-    setImages(prev => [...prev, ...newImages]);
+    },
+    stroke: { curve: 'smooth', width: 3 },
+    grid: { borderColor: 'rgba(255,255,255,0.05)', strokeDashArray: 4 },
+    xaxis: {
+      categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      labels: { style: { colors: '#94a3b8' } },
+      axisBorder: { show: false },
+    },
+    yaxis: { labels: { style: { colors: '#94a3b8' } } },
+    tooltip: { theme: 'dark' },
   };
 
-  const handleImageDelete = (indexToDelete) => {
-    setImages(prev => prev.filter((_, index) => index !== indexToDelete));
-  };
+  const chartSeries = [{
+    name: 'Sales',
+    data: [31, 40, 28, 51, 42, 109, 100]
+  }];
 
   return (
-    <div className="container-fluid gauswarn-bg-color">
-      <Navbar title="Rajlaxmi Dashboard" />
-
-      <div className="row">
-        {/* Sidebar */}
-        <div className="col-lg-2">
-          <SideBar />
-        </div>
-
-        {/* Main Content */}
-        <div className="col-lg-10 px-lg-5 d-flex justify-content-center flex-column">
-          {/* Dashboard Heading + Dropdown */}
-          <div className="row align-items-center my-3">
-            <div className="col-md-6 col-12">
-              <p className="font-20 mb-0 inter-font-family-500">Dashboard</p>
-            </div>
-            <div className="col-md-6 col-12 mt-2 mt-md-0 d-flex justify-content-md-end justify-content-end">
-              <DropDowns />
+    <div className="dashboard-container">
+      {/* Stats Grid */}
+      <div className="stats-grid">
+        {stats.map((stat, index) => (
+          <div key={index} className="stat-card glass-card fade-in" style={{"--delay": `${index * 0.1}s`}}>
+            <div className="stat-icon" style={{ color: stat.color }}>{stat.icon}</div>
+            <div className="stat-info">
+              <span className="stat-label">{stat.label}</span>
+              <h3 className="stat-value">{stat.value}</h3>
+              <span className="stat-change">{stat.change} vs last month</span>
             </div>
           </div>
+        ))}
+      </div>
 
-          {/* Cards */}
-          <DashboardCards cardData={DashboardCardData} />
-
-          {/* Bar Chart */}
-          <BarChart BarChartData={salesData} />
-
-
-          {/* <div className="row pt-3 bg-white recent-table box-shadow mt-4 mx-1">
-            <div className="col-lg-4">
-              <p className="font-20 inter-font-family-500 text-murmaid-color mt-lg-0 mt-4">
-                Banner Images
-              </p>
-              <div className="upload-ghee-banner d-flex align-items-center justify-content-center text-center">
-                <label className="btn btn-upload border border-success mb-2">
-                  <p className="mb-0 fs-2 "><ImFolderUpload className="text-success" /></p>
-                  Add Files
-                  <input type="file" multiple hidden onChange={handleImageUpload} />
-                  <div className="text-muted small">Or drag and drop files</div>
-                </label>
-                {error && <div className="text-danger small mt-2">{error}</div>}
-              </div>
+      <div className="dashboard-main-grid mt-4">
+        {/* Analytics Chart */}
+        <div className="chart-container glass-card fade-in">
+          <div className="card-header">
+            <h3>Sales Analytics</h3>
+            <div className="chart-filters">
+              <button className="filter-btn active">Daily</button>
+              <button className="filter-btn">Weekly</button>
+              <button className="filter-btn">Monthly</button>
             </div>
+          </div>
+          <div className="chart-body">
+            <Chart options={chartOptions} series={chartSeries} type="area" height={350} />
+          </div>
+        </div>
 
-            <div className="col-lg-8 ">
-              <div className="image-ghee-banner py-2 d-flex flex-wrap justify-content-around align-items-center">
-                {images.map((src, i) => (
-                  <div key={i} className="banner-image-box position-relative m-2">
-                    <img src={src} alt={`preview-${i}`} className="img-thumbnail" />
-                    <p
-                      onClick={() => handleImageDelete(i)}
-                      className="position-absolute fs-3"
-                      style={{ top: "-18px", right: "-10px", borderRadius: "50%" }}
-                    >
-                      <RxCrossCircled className="text-danger" />
-                    </p>
-                  </div>
+        {/* Recent Orders */}
+        <div className="recent-orders-container glass-card fade-in">
+          <div className="card-header">
+            <h3>Recent Orders</h3>
+            <button className="view-all-btn">View All</button>
+          </div>
+          <div className="table-wrapper">
+            <table className="modern-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Status</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(salesData?.recentOrders || [
+                  { _id: "#ORD-7721", user_name: "John Doe", status: "Delivered", total_price: "1250" },
+                  { _id: "#ORD-7722", user_name: "Jane Smith", status: "Pending", total_price: "850" },
+                  { _id: "#ORD-7723", user_name: "Robert Fox", status: "Shaped", total_price: "2100" },
+                  { _id: "#ORD-7724", user_name: "Emily Davis", status: "Cancelled", total_price: "450" }
+                ]).map((order, i) => (
+                  <tr key={i}>
+                    <td className="glow-text">{order._id}</td>
+                    <td>{order.user_name}</td>
+                    <td>
+                      <span className={`status-badge ${order.status.toLowerCase()}`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td>\u20B9{order.total_price}</td>
+                  </tr>
                 ))}
-              </div>
-
-              {images.length > 0 && (
-                <div className="d-flex justify-content-center">
-                  <button className="bg-light-green-color border rounded-2 px-4 py-1 text-dark">Upload</button>
-                </div>)}
-            </div>
-          </div> */}
-
-          {/* Orders + Customers */}
-          <div className="row mt-3 mb-5">
-            <div className="col-lg-8">
-              <RecentOrderTable
-                RecentOrderTableData={salesData?.recentOrders}
-              />
-            </div>
-            <div className="col-lg-4">
-              <p className="font-20 inter-font-family-500 text-murmaid-color mt-lg-0 mt-4">
-                Top Customers
-              </p>
-              {salesData?.topUsers?.length === 0 ? (
-                <div className="no-data text-center d-flex flex-column align-items-center">
-                  <div className="text-secondary opacity-50"><svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 512 512" height="150" width="150" xmlns="http://www.w3.org/2000/svg"><path d="M490.8 459.1L248.6 209.6c-4.6-4.8-12-5-16.8-.4-4.8 4.6-5 12-.4 16.8L473.6 475.5c4.7 4.9 12 5.1 16.9.4 4.8-4.7 5.1-12 .3-16.8zM245.8 196.5l-4-4.2C188.7 136.2 113.3 103.3 35.5 103.3c-6.6 0-12 5.4-12 12s5.4 12 12 12c58.2 0 112 18 152.1 50.8l.2.2 45.4 46.8-93.5 96.6c-11.8-8.2-26.6-13.1-42.5-13.1-39.7 0-72 32.3-72 72s32.3 72 72 72 72-32.3 72-72c0-10.4-2.2-20.2-6.1-29.1l80-82.6c13.7 12.3 22.3 30.2 22.3 50.1 0 37.5-30.5 68-68 68h-112c-6.6 0-12 5.4-12 12s5.4 12 12 12h112c50.8 0 92-41.2 92-92 0-30.3-14.7-57.2-37.4-74.4l30.2-31.2z"></path></svg></div>
-                  <h5 className="mt-3">No Top Customers Found</h5>
-                </div>
-              ) : (
-                <CustomerCards CustomerCardData={salesData?.topUsers} />
-              )}
-            </div>
-
-            {/* Optional Section */}
-            {/* 
-              <div className="col-lg-12 my-4">
-                <TopProduct hideCategories={true} />
-              </div> 
-            */}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -213,4 +152,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default DashboardHome;
