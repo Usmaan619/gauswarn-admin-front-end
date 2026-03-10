@@ -11,6 +11,7 @@ const Order = () => {
     "Total Amount",
     "Payment Status",
     "Order Status",
+    "Date",
     "Action",
   ];
 
@@ -40,7 +41,11 @@ const Order = () => {
           </div>
           <div className="col-lg-10 px-lg-5">
             {/* <p className='inter-font-family-500 font-20 text-drak-blue-colo'>Navbar</p> */}
-            <OrderTable ordersData={orders} headings={OrderHeadings}  refresh={getOrderAPI} />
+            <OrderTable
+              ordersData={orders}
+              headings={OrderHeadings}
+              refresh={getOrderAPI}
+            />
           </div>
         </div>
       </div>

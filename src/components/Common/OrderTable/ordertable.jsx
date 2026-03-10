@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { postData } from "../../Common/APIs/api";
 import Pagination from "react-bootstrap/Pagination";
 import noDataImg from "../../Assets/Images/home-img/flat-design-no-data-illustration.png";
+import moment from "moment/moment";
 
 const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -145,6 +146,7 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
                       <option value="Cancel">Cancel</option>
                     </select>
                   </td>
+                  <td>{moment(order?.DATE).format("MM/DD/YYYY")}</td>
 
                   <td>
                     <button

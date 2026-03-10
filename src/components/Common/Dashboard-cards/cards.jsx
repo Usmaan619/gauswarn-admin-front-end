@@ -25,7 +25,7 @@ const DashboardCards = ({ cardData }) => {
                   <div
                     className={`rounded-circle dashboard-img-circle ${card.circleColor} d-flex align-items-center justify-content-center`}
                   >
-                    <img src={card.imgSrc} alt="Loading" />
+                    {card.icon ? <span className="fs-1">{card.icon}</span> : <img src={card.imgSrc} alt="Loading" />}
                   </div>
                 </div>
                 <div className="col-lg-9 col-md-9 col-9 text-center">

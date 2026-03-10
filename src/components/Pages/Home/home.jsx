@@ -7,12 +7,10 @@ import Navbar from "../../Common/Navbar/navbar";
 import DropDowns from "../../Common/Dropdown/dropdown";
 import BarChart from "../../Common/Graph/Graph";
 
-// images
-import Team from "../../Assets/Images/home-img/team.svg";
-import Trend from "../../Assets/Images/home-img/trend.svg";
-import Rupee from "../../Assets/Images/home-img/Rupee.svg";
+// icons
+import { FaUsers, FaShoppingCart, FaRupeeSign } from "react-icons/fa";
+import { FiTrendingUp } from "react-icons/fi";
 import noDataImg from '../../Assets/Images/home-img/flat-design-no-data-illustration.png';
-import Cart from "../../Assets/Images/home-img/shopping-cart.svg";
 import { getData, postData } from "../../Common/APIs/api";
 import { DropdownContext } from "../../../Context/DropdownContext";
 import { RxCrossCircled } from "react-icons/rx";
@@ -58,28 +56,28 @@ const Home = () => {
       label: "Total Products",
       count: '1',
       // count: salesData?.totalProducts || '1',
-      imgSrc: Team,
+      icon: <FaUsers size={28} color="#0077b6" />,
       cardColor: "bg-light-blue-color",
       circleColor: "dashboard-blue-color",
     },
     {
       label: "Total Sales",
       count: salesData?.summary?.total_sales ?? "0",
-      imgSrc: Trend,
+      icon: <FiTrendingUp size={28} color="#6ba368" />,
       cardColor: "bg-light-green-color",
       circleColor: "dashboard-green-color",
     },
     {
       label: "Total Order",
       count: salesData?.totalOrders ?? "0",
-      imgSrc: Cart,
+      icon: <FaShoppingCart size={28} color="#e86a33" />,
       cardColor: "bg-light-yellow-color",
       circleColor: "dashboard-yellow-color",
     },
     {
       label: "Total Profit",
       count: salesData?.monthlyProfit ?? "0",
-      imgSrc: Rupee,
+      icon: <FaRupeeSign size={28} color="#6a0dad" />,
       cardColor: "bg-light-purple-color",
       circleColor: "dashboard-purple-color",
     },

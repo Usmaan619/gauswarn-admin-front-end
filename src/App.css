@@ -1,19 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap");
 
 :root {
-  --light-cream-color: #fefbe9;
-  --gauswarn-light-color: #f6f0e4;
-  --red-color: #e07a5f;
-  --dark-blue-color: #131523;
-  --little-murmaid-color: #2f3e46;
+  --light-cream-color: #fdfbf7;
+  --gauswarn-light-color: #faf7f2;
+  --red-color: #e56b55;
+  --dark-blue-color: #1a1e36;
+  --little-murmaid-color: #2b3a42;
   --chinese-black-color: #111111;
   --dark-brown-color: #5d4037;
-  --light-green-color: #c5ebaa;
-  --light-blue-color: #b5e2fa;
-  --light-purple-color: #d8bfd8;
-  --light-yellow-color: #f7d486;
-  --gray-color: #575757;
-  --dark-silver-color: #707070;
+  --light-green-color: #d4f0c6;
+  --light-blue-color: #cbeaff;
+  --light-purple-color: #e6d3e6;
+  --light-yellow-color: #ffe4a0;
+  --gray-color: #636e72;
+  --dark-silver-color: #b2bec3;
 }
 
 ::-webkit-scrollbar {
@@ -86,7 +86,11 @@
 
 /* Box shadow */
 .box-shadow {
-  box-shadow: 0px 4px 16px 1px #0000001a;
+  box-shadow: 0px 8px 24px rgba(149, 157, 165, 0.15);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.box-shadow:hover {
+  box-shadow: 0px 12px 32px rgba(149, 157, 165, 0.25);
 }
 
 /* 
@@ -164,8 +168,15 @@
 
 /* Dashboard Css */
 .dashboard-card {
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 24px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+}
+.dashboard-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
 }
 
 .dashboard-img-circle {
@@ -243,6 +254,12 @@ td {
 .customer-card {
   width: 100%;
   margin-bottom: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 12px;
+}
+.customer-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 991px) {
@@ -414,8 +431,7 @@ td {
 .login-container {
   height: 100vh;
   width: 100%;
-  background-image: url("./components/Assets/Images/Login-img/Rectangle\ 40475.svg");
-  /* Your food spice background */
+  background: linear-gradient(135deg, var(--dark-blue-color) 0%, var(--little-murmaid-color) 100%);
   background-size: cover;
   background-position: center;
   padding: 1rem;
