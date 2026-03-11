@@ -208,28 +208,32 @@ function FilterDropdown() {
   const { setDropdownData } = useContext(DropdownContext);
 
   const monthsByYear = {
+    "2024": [...Array(12)].map((_, i) => ({
+      label: new Date(2024, i).toLocaleString("default", { month: "short", year: "numeric" }),
+      value: i + 1,
+    })),
     "2025": [...Array(12)].map((_, i) => ({
       label: new Date(2025, i).toLocaleString("default", { month: "short", year: "numeric" }),
       value: i + 1, // month number (1-based)
     })),
     "2026": [...Array(12)].map((_, i) => ({
-      label: new Date(2024, i).toLocaleString("default", { month: "short", year: "numeric" }),
+      label: new Date(2026, i).toLocaleString("default", { month: "short", year: "numeric" }),
       value: i + 1,
     })),
     "2027": [...Array(12)].map((_, i) => ({
-      label: new Date(2023, i).toLocaleString("default", { month: "short", year: "numeric" }),
+      label: new Date(2027, i).toLocaleString("default", { month: "short", year: "numeric" }),
       value: i + 1,
     })),
     "2028": [...Array(12)].map((_, i) => ({
-      label: new Date(2022, i).toLocaleString("default", { month: "short", year: "numeric" }),
+      label: new Date(2028, i).toLocaleString("default", { month: "short", year: "numeric" }),
       value: i + 1,
     })),
     "2029": [...Array(12)].map((_, i) => ({
-      label: new Date(2022, i).toLocaleString("default", { month: "short", year: "numeric" }),
+      label: new Date(2029, i).toLocaleString("default", { month: "short", year: "numeric" }),
       value: i + 1,
     })),
     "2030": [...Array(12)].map((_, i) => ({
-      label: new Date(2022, i).toLocaleString("default", { month: "short", year: "numeric" }),
+      label: new Date(2030, i).toLocaleString("default", { month: "short", year: "numeric" }),
       value: i + 1,
     })),
   };

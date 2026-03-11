@@ -10,7 +10,8 @@
 
 # production
 /build
-
+admin_build.zip
+admin_build
 # misc
 .DS_Store
 .env.local
