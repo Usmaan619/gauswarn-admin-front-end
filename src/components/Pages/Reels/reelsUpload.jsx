@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../../Common/SideBar/sidebar";
 import Navbar from "../../Common/Navbar/navbar";
-import {
-  getData,
-  postData,
-  deleteDataNew,
-} from "../../Common/APIs/api";
+import { getData, postData, deleteDataNew } from "../../Common/APIs/api";
 import { toastSuccess, toastError } from "../../../Services/toast.service";
 
 // Extract ID from instagram link
@@ -86,7 +82,6 @@ const ReelUploader = () => {
     } else toastError("Failed");
   };
 
-
   useEffect(() => {
     loadReels();
   }, []);
@@ -161,7 +156,7 @@ const ReelUploader = () => {
                   className="btn btn-dark btn-sm"
                   onClick={() => {
                     navigator.clipboard.writeText(
-                      `https://www.instagram.com/reel/${r.reel_id}/`
+                      `https://www.instagram.com/reel/${r.reel_id}/`,
                     );
                     toastSuccess("Copied!");
                   }}

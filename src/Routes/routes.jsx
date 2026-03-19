@@ -4,7 +4,8 @@ import { UserContext } from "../Context/UserContext";
 import { getItem } from "../Services/storage.service.js";
 import { axiosInterceptor } from "../AxiosInstance/axiosInstance.jsx";
 
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense } from "react";
+import YoutubeShortsUploader from "../components/Pages/YouTubeShorts/youtubeShorts.jsx";
 
 // Public Pages
 const Login = lazy(() => import("../components/Common/Auth/Login/login"));
@@ -14,25 +15,42 @@ const Forgot = lazy(() => import("../components/Common/Auth/Forgot/forgot"));
 const Home = lazy(() => import("../components/Pages/Home/home"));
 const Order = lazy(() => import("../components/Pages/Order/order"));
 const Product = lazy(() => import("../components/Pages/Products/product"));
-const ProductInfo = lazy(() => import("../components/Pages/Products/productInfo"));
+const ProductInfo = lazy(
+  () => import("../components/Pages/Products/productInfo"),
+);
 const Customer = lazy(() => import("../components/Pages/Customer/customer"));
-const CustomerInfo = lazy(() => import("../components/Pages/Customer/customerInfo"));
+const CustomerInfo = lazy(
+  () => import("../components/Pages/Customer/customerInfo"),
+);
 const Feedback = lazy(() => import("../components/Pages/Feedback/feedback"));
 const Contact = lazy(() => import("../components/Pages/Contact/contact"));
 
 const Error = lazy(() => import("../components/Pages/Error404/error.jsx"));
-const BannerManager = lazy(() => import("../components/Pages/Home-Banner/home-banner.jsx"));
-const ReelUploader = lazy(() => import("../components/Pages/Reels/reelsUpload.jsx"));
-const BlogCreate = lazy(() => import("../components/Pages/Blogs/BlogCreate.jsx"));
+const BannerManager = lazy(
+  () => import("../components/Pages/Home-Banner/home-banner.jsx"),
+);
+const ReelUploader = lazy(
+  () => import("../components/Pages/Reels/reelsUpload.jsx"),
+);
+const BlogCreate = lazy(
+  () => import("../components/Pages/Blogs/BlogCreate.jsx"),
+);
 const BlogList = lazy(() => import("../components/Pages/Blogs/BlogList.jsx"));
 const BlogView = lazy(() => import("../components/Pages/Blogs/BlogView.jsx"));
 const BlogEdit = lazy(() => import("../components/Pages/Blogs/BlogEdit.jsx"));
 const BlogsTest = lazy(() => import("../components/Pages/Blogs/blogtest.jsx"));
 const Inquiry = lazy(() => import("../components/Pages/Inquiry/Inquiry.jsx"));
-const NewsletterPage = lazy(() => import("../components/Pages/Newsletter/Newsletter.jsx"));
+const NewsletterPage = lazy(
+  () => import("../components/Pages/Newsletter/Newsletter.jsx"),
+);
+const Visitors = lazy(() => import("../components/Pages/Visitors/Visitors.jsx"));
 
-const CreateAdminUserPage = lazy(() => import("../components/Pages/CreateAdminUser/CreateAdminUserPage.jsx"));
-const OfferManagement = lazy(() => import("../components/OfferManagement/OfferManagement.jsx"));
+const CreateAdminUserPage = lazy(
+  () => import("../components/Pages/CreateAdminUser/CreateAdminUserPage.jsx"),
+);
+const OfferManagement = lazy(
+  () => import("../components/OfferManagement/OfferManagement.jsx"),
+);
 
 const AuthRoutes = () => {
   const { UserLogin, setUserLogin } = useContext(UserContext);
@@ -45,7 +63,15 @@ const AuthRoutes = () => {
   }, [setUserLogin]);
 
   return (
-    <Suspense fallback={<div className="d-flex justify-content-center align-items-center vh-100"><div className="spinner-border text-primary" role="status"><span className="visually-hidden">Loading...</span></div></div>}>
+    <Suspense
+      fallback={
+        <div className="d-flex justify-content-center align-items-center vh-100">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      }
+    >
       <Routes>
         {!UserLogin ? (
           <>
@@ -58,7 +84,11 @@ const AuthRoutes = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/order" element={<Order />} />
             <Route path="/product" element={<Product />} />
-            <Route path="/home-page-banner-change" element={<BannerManager />} />
+            <Route
+              path="/home-page-banner-change"
+              element={<BannerManager />}
+            />
+            <Route path="/youtube-shorts" element={<YoutubeShortsUploader />} />
 
             <Route path="/reels-upload" element={<ReelUploader />} />
 
@@ -72,12 +102,16 @@ const AuthRoutes = () => {
             <Route path="/inquiry" element={<Inquiry />} />
             <Route path="/newlatter" element={<NewsletterPage />} />
             <Route path="/offerBanner" element={<OfferManagement />} />
-            <Route path="/create-admin-user" element={<CreateAdminUserPage />} />
+            <Route
+              path="/create-admin-user"
+              element={<CreateAdminUserPage />}
+            />
 
             <Route path="/blog/create" element={<BlogCreate />} />
             <Route path="/blog/list" element={<BlogList />} />
             <Route path="/blog/view/:slug" element={<BlogView />} />
             <Route path="/blog/edit/:id" element={<BlogEdit />} />
+            <Route path="/visitors" element={<Visitors />} />
 
             <Route path="*" element={<Error />} />
           </>

@@ -190,9 +190,9 @@ const Sidebar = () => {
     },
 
     {
-      to: "/reels-upload",
+      to: "/youtube-shorts",
       icon: MdSlowMotionVideo,
-      label: "Reels",
+      label: "Shorts",
       permission: "reels",
     },
 
@@ -257,7 +257,12 @@ const Sidebar = () => {
       label: "Feedback",
       permission: "feedback",
     },
-
+    {
+      to: "/visitors",
+      icon: FaUsers,
+      label: "Visitors",
+      permission: "visitors",
+    },
     {
       to: "/",
       icon: FiLogOut,
