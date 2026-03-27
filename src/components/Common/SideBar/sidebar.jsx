@@ -258,6 +258,12 @@ const Sidebar = () => {
       permission: "feedback",
     },
     {
+      to: "/coupons",
+      icon: LiaTagSolid,
+      label: "Coupons",
+      permission: "coupons",
+    },
+    {
       to: "/visitors",
       icon: FaUsers,
       label: "Visitors",

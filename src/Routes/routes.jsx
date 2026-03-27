@@ -51,6 +51,9 @@ const CreateAdminUserPage = lazy(
 const OfferManagement = lazy(
   () => import("../components/OfferManagement/OfferManagement.jsx"),
 );
+const CouponManager = lazy(
+  () => import("../components/Pages/Coupons/CouponManager.jsx"),
+);
 
 const AuthRoutes = () => {
   const { UserLogin, setUserLogin } = useContext(UserContext);
@@ -112,6 +115,7 @@ const AuthRoutes = () => {
             <Route path="/blog/view/:slug" element={<BlogView />} />
             <Route path="/blog/edit/:id" element={<BlogEdit />} />
             <Route path="/visitors" element={<Visitors />} />
+            <Route path="/coupons" element={<CouponManager />} />
 
             <Route path="*" element={<Error />} />
           </>
