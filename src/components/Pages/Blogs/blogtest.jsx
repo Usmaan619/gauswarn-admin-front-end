@@ -13,6 +13,8 @@ import {
   Save,
   Search,
 } from "lucide-react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 // Main Blog Manager Component
 const BlogManager = () => {
@@ -615,6 +617,35 @@ const BlogForm = ({ onNavigate, onSubmit, blogId, title }) => {
     content: "",
   });
 
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ color: [] }, { background: [] }],
+      ["link", "image", "video"],
+      ["clean"],
+      [{ align: [] }],
+    ],
+  };
+
+  const formats = [
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "list",
+    "bullet",
+    "indent",
+    "link",
+    "image",
+    "video",
+    "color",
+    "background",
+    "align",
+  ];
+
   const [imagePreview, setImagePreview] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -654,6 +685,13 @@ const BlogForm = ({ onNavigate, onSubmit, blogId, title }) => {
       ...prev,
       [name]: value,
       ...(name === "title" && { slug: generateSlug(value) }),
+    }));
+  };
+
+  const handleContentChange = (content) => {
+    setFormData((prev) => ({
+      ...prev,
+      content: content,
     }));
   };
 
@@ -885,21 +923,19 @@ const BlogForm = ({ onNavigate, onSubmit, blogId, title }) => {
               Content *
             </label>
 
-            <textarea
-              name="content"
-              value={formData.content}
-              onChange={handleInputChange}
-              rows={12}
-              placeholder="Write blog content..."
-              style={{
-                width: "100%",
-                padding: "20px",
-                borderRadius: "12px",
-                border: "1px solid #e2e8f0",
-                lineHeight: 1.6,
-              }}
-            />
+            <div className="editor-container shadow-sm" style={{ borderRadius: "12px", overflow: "hidden", border: "1px solid #e2e8f0" }}>
+              <ReactQuill
+                value={formData.content}
+                onChange={handleContentChange}
+                theme="snow"
+                modules={modules}
+                formats={formats}
+                placeholder="Write blog content here..."
+                style={{ height: 400, border: "none" }}
+              />
+            </div>
           </div>
+          <div style={{ marginTop: "60px" }}></div>
 
           <button
             type="submit"
