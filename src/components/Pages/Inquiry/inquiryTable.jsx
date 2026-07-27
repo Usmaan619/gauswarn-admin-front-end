@@ -26,7 +26,6 @@ const InquiryTable = ({
     if (!window.confirm("Are you sure you want to delete this inquiry?"))
       return;
 
-    console.log("Deleting ID:", id);
 
     const response = await deleteDataNew(`/deleteb2bInquiry/${id}`);
 

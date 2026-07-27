@@ -270,7 +270,6 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
                           : viewData.paymentDetails;
                     }
                   } catch (err) {
-                    console.error("Error parsing paymentDetails:", err);
                   }
 
                   if (!payment) {

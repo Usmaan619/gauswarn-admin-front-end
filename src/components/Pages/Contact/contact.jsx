@@ -17,7 +17,6 @@ const Contact = () => {
       const response = await getData(endpoint);
       if (response?.success) setContacts(response?.contact || []);
     } catch (error) {
-      console.log("error: ", error);
     }
   };
 

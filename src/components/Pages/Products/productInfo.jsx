@@ -308,7 +308,6 @@ const ProductInfo = () => {
         replace(response.products || []);
       }
     } catch (error) {
-      console.log("API error: ", error);
     }
   }, [replace]);
 
@@ -333,7 +332,6 @@ const ProductInfo = () => {
         await getProductAPI();
       }
     } catch (error) {
-      console.log("Image update error:", error);
     }
   };
 
@@ -356,7 +354,6 @@ const ProductInfo = () => {
         await getProductAPI();
       }
     } catch (err) {
-      console.log("Add image error:", err);
     }
   };
 
@@ -380,7 +377,6 @@ const ProductInfo = () => {
         await getProductAPI();
       }
     } catch (error) {
-      console.log("Update error:", error);
     }
   };
 

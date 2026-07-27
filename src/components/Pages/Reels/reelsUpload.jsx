@@ -56,7 +56,6 @@ const ReelUploader = () => {
         res = await postData("/reels", payload);
       }
 
-      console.log("SAVE RESPONSE:", res);
 
       if (res && res?.data?.success) {
         toastSuccess(editItem ? "Updated" : "Added");
@@ -67,7 +66,6 @@ const ReelUploader = () => {
         toastError(res?.message || "Failed saving reel!");
       }
     } catch (e) {
-      console.error(e);
       toastError("Request Failed!");
     }
   };

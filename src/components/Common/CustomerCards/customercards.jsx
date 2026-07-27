@@ -77,14 +77,12 @@ import React from "react";
 
 
 const CustomerCards = ({ CustomerCardData }) => {
-  console.log('CustomerCardData: ', CustomerCardData);
   // Group orders by unique key (mobile + email)
   const groupedData = [];
 
   CustomerCardData?.forEach((item) => {
     const uniqueKey = `${item.user_mobile_num}-${item.user_email}`;
     const existing = groupedData.find((user) => user.key === uniqueKey);
-    console.log('existing: ', existing);
 
     if (existing) {
       existing.user_total_amount += item.user_total_amount; // Correct field

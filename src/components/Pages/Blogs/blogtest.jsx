@@ -40,7 +40,6 @@ const BlogManager = () => {
     try {
       const res = await getData(`blogs?page=${pageNo}&limit=${limit}`);
 
-      console.log("BLOG API RESPONSE:", res);
 
       if (res?.blogs) {
         setBlogs(res.blogs);
@@ -64,10 +63,8 @@ const BlogManager = () => {
   };
 
   const createBlog = async (id, blogData) => {
-    console.log("FINAL BLOG DATA RECEIVED:", blogData);
 
     for (let [key, val] of blogData.entries()) {
-      console.log("FD ENTRY:", key, val);
     }
 
     try {
@@ -77,7 +74,6 @@ const BlogManager = () => {
       setCurrentView("list");
     } catch (err) {
       toastError("Failed to create blog");
-      console.log(err);
     }
   };
 
@@ -89,7 +85,6 @@ const BlogManager = () => {
       setCurrentView("list");
     } catch (err) {
       toastError("Failed to update blog");
-      console.log(err);
     }
   };
 
@@ -103,7 +98,6 @@ const BlogManager = () => {
       fetchBlogs(page);
     } catch (err) {
       toastError("Failed to delete blog");
-      console.log(err);
     }
   };
 
@@ -669,7 +663,6 @@ const BlogForm = ({ onNavigate, onSubmit, blogId, title }) => {
           setImagePreview(blog.image_url || null); // पुरानी image दिखेगी
         }
       } catch (err) {
-        console.log("Error loading blog:", err);
         toastError("Failed to load blog data");
       }
     };
@@ -731,14 +724,11 @@ const BlogForm = ({ onNavigate, onSubmit, blogId, title }) => {
       }
 
       // Debug Log
-      console.log("FormData being sent:");
       for (let [key, value] of fd.entries()) {
-        console.log(key, value);
       }
 
       await onSubmit(blogId, fd);
     } catch (err) {
-      console.error("Submit error:", err);
       toastError("Failed to submit blog");
     } finally {
       setLoading(false);
@@ -972,7 +962,6 @@ const BlogView = ({ onNavigate, slug }) => {
         const res = await getData(`/blogs/single/${slug}`);
         setBlog(res.blog);
       } catch (err) {
-        console.log(err);
         toastError("Failed to load blog");
       }
     };

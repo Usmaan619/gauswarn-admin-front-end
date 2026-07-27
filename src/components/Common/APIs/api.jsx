@@ -102,7 +102,6 @@ export const deleteDataNew = async (url) => {
     const res = await axiosInstance.delete(`${API_BASE_URL}${url}`);
     return res.data;
   } catch (err) {
-    console.error("DELETE ERROR:", err);
     return err.response?.data || { success: false };
   }
 };

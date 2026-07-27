@@ -25,7 +25,6 @@ const Inquiry = () => {
         setPagination(response.pagination);
       }
     } catch (error) {
-      console.log("Inquiry Fetch Error:", error);
     }
   }, [filters]);
 

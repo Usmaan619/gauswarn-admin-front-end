@@ -310,7 +310,6 @@ const BarChart = ({ BarChartData }) => {
   const totalAmount = summary?.total_sales || 0;
 
   const filterMonth = moment(start).format('MMMM')
-  console.log('filterMonth: ', filterMonth);
 
   const generateChartData = () => {
     const salesMap = {};

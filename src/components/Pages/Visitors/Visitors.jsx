@@ -16,7 +16,6 @@ const Visitors = () => {
         setVisitors(response.visitors || []);
       }
     } catch (error) {
-      console.error("Visitor Fetch Error:", error);
     } finally {
       setLoading(false);
     }

@@ -16,7 +16,6 @@ const Order = () => {
   ];
 
   const [orders, setOrders] = useState([]);
-  console.log("orders: ", orders);
 
   const getOrderAPI = useCallback(async () => {
     const endpoint = "getAllOrderDetails";
@@ -24,7 +23,6 @@ const Order = () => {
       const response = await getData(endpoint);
       if (response?.success) setOrders(response?.orderDetails || []);
     } catch (error) {
-      console.log("error: ", error);
     }
   }, []);
 

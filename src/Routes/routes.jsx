@@ -1,7 +1,7 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { UserContext } from "../Context/UserContext";
-import { getItem } from "../Services/storage.service.js";
+import { isSessionValid } from "../Services/storage.service";
 import { axiosInterceptor } from "../AxiosInstance/axiosInstance.jsx";
 
 import { lazy, Suspense } from "react";
@@ -56,14 +56,19 @@ const CouponManager = lazy(
 );
 
 const AuthRoutes = () => {
-  const { UserLogin, setUserLogin } = useContext(UserContext);
+  const { UserLogin, setUserLogin, logout } = useContext(UserContext);
 
-  axiosInterceptor(setUserLogin);
-
+  // Initialize interceptor once with logout callback
   useEffect(() => {
-    const token = getItem("token");
-    setUserLogin(token ?? null);
+    axiosInterceptor(setUserLogin);
   }, [setUserLogin]);
+
+  // Validate session on mount — if session invalid, force logout
+  useEffect(() => {
+    if (UserLogin && !isSessionValid()) {
+      logout();
+    }
+  }, [UserLogin, logout]);
 
   return (
     <Suspense
@@ -80,6 +85,8 @@ const AuthRoutes = () => {
           <>
             <Route path="/" element={<Login />} />
             <Route path="/forgot" element={<Forgot />} />
+            {/* Any other path → redirect to login */}
+            <Route path="*" element={<Navigate to="/" replace />} />
           </>
         ) : (
           <>
@@ -117,13 +124,11 @@ const AuthRoutes = () => {
             <Route path="/visitors" element={<Visitors />} />
             <Route path="/coupons" element={<CouponManager />} />
 
+            {/* Root → Home when logged in */}
+            <Route path="/" element={<Navigate to="/home" replace />} />
             <Route path="*" element={<Error />} />
           </>
         )}
-
-        {/* Fallback route */}
-
-        <Route path="/" element={UserLogin ? <Home /> : <Login />} />
       </Routes>
     </Suspense>
   );

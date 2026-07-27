@@ -15,7 +15,6 @@ const VisitorsTable = ({ visitors, loading, refresh }) => {
           toastError("Something went wrong while deleting.");
         }
       } catch (error) {
-        console.error("Delete Error:", error);
         toastError("Something went wrong while deleting.");
       }
     }
@@ -32,7 +31,6 @@ const VisitorsTable = ({ visitors, loading, refresh }) => {
           toastError("Something went wrong while clearing.");
         }
       } catch (error) {
-        console.error("Clear All Error:", error);
         toastError("Something went wrong while clearing.");
       }
     }

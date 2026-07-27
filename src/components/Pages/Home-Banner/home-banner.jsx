@@ -28,7 +28,6 @@ const BannerManager = () => {
         });
       }
     } catch (err) {
-      console.error("Failed to fetch banners:", err);
       toastError("Failed to load banners");
     } finally {
       setLoading(false);
@@ -75,7 +74,6 @@ const BannerManager = () => {
         toastError("Failed to update banner");
       }
     } catch (err) {
-      console.error(`Banner ${slot} update failed:`, err);
       const errorMsg = err?.message || "Upload failed. Please try again.";
       toastError(errorMsg);
     } finally {

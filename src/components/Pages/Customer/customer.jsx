@@ -12,14 +12,12 @@ const Customer = () => {
       const response = await getData(endpoint);
       if (response?.success) setCustomers(response?.customers || []);
     } catch (error) {
-      console.log("error: ", error);
     }
   }, []);
 
   useEffect(() => {
     getCustomerAPI();
   }, [getCustomerAPI]);
-  console.log("customer: ", customer);
 
   return (
     <>

@@ -41,7 +41,6 @@ const CouponManager = () => {
     try {
       setLoading(true);
       const res = await getData("coupons");
-      console.log("Coupons API Response:", res);
 
       // Handle both {success: true, data: []} and direct array [] responses
       if (res) {
@@ -55,7 +54,6 @@ const CouponManager = () => {
         }
       }
     } catch (err) {
-      console.error("Fetch error:", err);
       toastError("Failed to fetch coupons");
     } finally {
       setLoading(false);
@@ -150,7 +148,6 @@ const CouponManager = () => {
   };
 
   const openEditModal = (coupon) => {
-    console.log("Editing Coupon Data:", coupon); // Debugging ke liye
     setEditingCoupon(coupon);
 
     // Safer date parsing
@@ -161,7 +158,6 @@ const CouponManager = () => {
           .toISOString()
           .split("T")[0];
       } catch (e) {
-        console.error("Date parsing error:", e);
         formattedDate = coupon.expiry_date; // Fallback to raw string if possible
       }
     }

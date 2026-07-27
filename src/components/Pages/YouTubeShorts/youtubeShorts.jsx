@@ -94,7 +94,6 @@ const YoutubeShortsUploader = () => {
         toastError(res?.message || "Failed saving YouTube short!");
       }
     } catch (e) {
-      console.error(e);
       toastError("Request Failed!");
     }
   };

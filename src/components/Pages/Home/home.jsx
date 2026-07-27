@@ -19,12 +19,10 @@ const Home = () => {
 
   const [salesData, setSalesData] = useState();
   const [counts, setCounts] = useState({});
-  console.log("salesDataaaaaa: ", salesData);
 
   const getDashboardCounts = async () => {
     try {
       const response = await getData("dashboardCounts");
-      console.log("Dashboard Counts Response: ", response);
       if (response?.success) {
         // Matches your confirmed structure: { success: true, counts: { ... } }
         setCounts(response.counts || response.data || {});
@@ -33,7 +31,6 @@ const Home = () => {
         setCounts(response);
       }
     } catch (error) {
-      console.log("Error fetching dashboard counts:", error);
     }
   };
 
@@ -47,13 +44,11 @@ const Home = () => {
       };
 
       const response = await postData(endpoint, payload);
-      console.log("Sales Data Response: ", response);
 
       if (response?.data?.success) {
         setSalesData(response?.data?.data);
       }
     } catch (error) {
-      console.log("Error fetching sales data: ", error);
     }
   };
 

@@ -47,7 +47,6 @@ const OfferTable = () => {
         offer_text4: dataArray[3] || "",
       });
     } catch (error) {
-      console.error("Fetch offers error:", error);
       toastError("Unable to fetch offers. Please try again."); // [web:7][web:14]
     } finally {
       setLoading(false);
@@ -75,7 +74,6 @@ const OfferTable = () => {
         toastError(response?.message || "Failed to update offers."); // [web:7]
       }
     } catch (error) {
-      console.error("Update offers error:", error);
       toastError("Something went wrong while updating offers."); // [web:7]
     }
   };

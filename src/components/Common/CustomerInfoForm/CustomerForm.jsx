@@ -3,7 +3,6 @@ import "./customer.css"; // Importing the component-specific stylesheet
 
 // CustomerInfoForm component definition
 const CustomerInfoForm = ({ CustomerInfoData }) => {
-  console.log("CustomerInfoData: ", CustomerInfoData);
 
   return (
     <div className="info-form-container bg-light-cream-color">

@@ -1,4 +1,12 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
+import {
+  getItem,
+  setItem,
+  removeItem,
+  clearSession,
+  isSessionValid,
+  initSession,
+} from "../Services/storage.service";
 
 export const UserContext = createContext();
 
@@ -7,40 +15,64 @@ export const UserProvider = ({ children }) => {
   const [userPermissions, setUserPermissions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  //  Initialize from localStorage on app load
+  // Full logout — clears session and resets state
+  const logout = useCallback(() => {
+    clearSession();
+    setUserLogin(null);
+    setUserPermissions([]);
+  }, []);
+
+  //  Initialize from sessionStorage on app load (with validation)
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const permissions = localStorage.getItem("permissions");
+    if (isSessionValid()) {
+      const token = getItem("token");
+      const permissions = sessionStorage.getItem("permissions");
 
-    if (token) {
-      setUserLogin(token);
-    }
-
-    if (permissions) {
-      try {
-        setUserPermissions(JSON.parse(permissions));
-      } catch (error) {
-        console.error("Error parsing permissions:", error);
-        setUserPermissions([]);
+      if (token) {
+        setUserLogin(token);
       }
+
+      if (permissions) {
+        try {
+          setUserPermissions(JSON.parse(permissions));
+        } catch (error) {
+          setUserPermissions([]);
+        }
+      }
+    } else {
+      // Invalid or expired session — force logout
+      logout();
     }
 
     setIsLoading(false);
-  }, []);
+  }, [logout]);
 
-  //  Save permissions to localStorage whenever they change
+  // Periodic session health check (every 60 seconds)
+  useEffect(() => {
+    if (!UserLogin) return;
+
+    const interval = setInterval(() => {
+      if (!isSessionValid()) {
+        logout();
+      }
+    }, 60 * 1000); // Check every 60 seconds
+
+    return () => clearInterval(interval);
+  }, [UserLogin, logout]);
+
+  //  Save permissions to sessionStorage whenever they change
   const setUserPermissionsWrapper = (permissions) => {
     setUserPermissions(permissions);
-    localStorage.setItem("permissions", JSON.stringify(permissions));
+    sessionStorage.setItem("permissions", JSON.stringify(permissions));
   };
 
-  //  Save login to localStorage whenever it changes
+  //  Save login to sessionStorage whenever it changes
   const setUserLoginWrapper = (token) => {
     setUserLogin(token);
     if (token) {
-      localStorage.setItem("token", token);
+      setItem("token", token);
     } else {
-      localStorage.removeItem("token");
+      removeItem("token");
     }
   };
 
@@ -52,6 +84,7 @@ export const UserProvider = ({ children }) => {
         userPermissions,
         setUserPermissions: setUserPermissionsWrapper,
         isLoading,
+        logout,
       }}
     >
       {children}
