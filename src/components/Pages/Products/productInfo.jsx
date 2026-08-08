@@ -280,7 +280,7 @@
 import React, { useEffect, useCallback } from "react";
 import Sidebar from "../../Common/SideBar/sidebar";
 import Navbar from "../../Common/Navbar/navbar";
-import { getData, postData, postFormData } from "../../Common/APIs/api";
+import { getData, postData } from "../../Common/APIs/api";
 import { toastSuccess } from "../../../Services/toast.service";
 import { useForm, useFieldArray } from "react-hook-form";
 
@@ -315,17 +315,29 @@ const ProductInfo = () => {
     getProductAPI();
   }, [getProductAPI]);
 
+  // Convert file to base64 string
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const handleImageReplace = async (productIndex, replaceIndex, file) => {
     const allData = getValues();
     const product = allData.products[productIndex];
 
-    const formData = new FormData();
-    formData.append("product_id", product.product_id);
-    formData.append("replace_index", replaceIndex);
-    formData.append("image", file);
-
     try {
-      const response = await postFormData("/replace-image", formData);
+      // Convert file to base64
+      const base64Image = await fileToBase64(file);
+
+      const response = await postData("/replace-image-base64", {
+        product_id: product.product_id,
+        replace_index: replaceIndex,
+        image: base64Image,
+      });
 
       if (response?.data?.success) {
         toastSuccess("Image replaced successfully!");
@@ -339,15 +351,16 @@ const ProductInfo = () => {
     const allData = getValues();
     const product = allData.products[productIndex];
 
-    const formData = new FormData();
-    formData.append("product_id", product.product_id);
-
-    for (let f of files) {
-      formData.append("images", f);
-    }
-
     try {
-      const response = await postFormData("/add-images", formData);
+      // Convert all files to base64
+      const base64Images = await Promise.all(
+        Array.from(files).map((file) => fileToBase64(file))
+      );
+
+      const response = await postData("/add-images-base64", {
+        product_id: product.product_id,
+        images: base64Images,
+      });
 
       if (response?.data?.success) {
         toastSuccess("Images uploaded successfully!");

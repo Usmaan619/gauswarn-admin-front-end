@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import Sidebar from "../../Common/SideBar/sidebar";
 import Navbar from "../../Common/Navbar/navbar";
-import { getData, postFormData } from "../../Common/APIs/api";
+import { getData, postData } from "../../Common/APIs/api";
 import { toastSuccess, toastError } from "../../../Services/toast.service";
 import "./BannerManager.css";
 
@@ -55,19 +55,31 @@ const BannerManager = () => {
     return true;
   };
 
+  // Convert file to base64 string
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
   const updateBanner = async (slot, file) => {
     if (!file || !validateFile(file)) return;
 
     setUploading(slot);
 
     try {
-      const formData = new FormData();
-      formData.append("slots", slot);
-      formData.append("banner", file);
+      // Convert file to base64
+      const base64Image = await fileToBase64(file);
 
-      const res = await postFormData("/home-banners-images", formData);
+      const res = await postData("/home-banners-base64", {
+        slot,
+        image: base64Image,
+      });
 
-      if (res?.data?.updated || res?.data?.newUrl) {
+      if (res?.data?.success) {
         toastSuccess(`Banner ${slot} updated successfully!`);
         await fetchBanners();
       } else {
