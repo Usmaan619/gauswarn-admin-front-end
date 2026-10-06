@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { postData } from "../../Common/APIs/api";
+import { postData, getData } from "../../Common/APIs/api";
 import Pagination from "react-bootstrap/Pagination";
-
+import html2pdf from "html2pdf.js";
 import moment from "moment/moment";
 
 const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
@@ -32,6 +32,28 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
   const updateOrderStatus = async (id, status) => {
     await postData(`/updateOrderStatus/${id}`, { status });
     refresh();
+  };
+
+  // DOWNLOAD INVOICE
+  const handleDownloadInvoice = async (order) => {
+    try {
+      const res = await getData(`getInvoiceHtml/${order.user_id}`);
+      if (res.success && res.html) {
+        const opt = {
+          margin:       0,
+          filename:     `Invoice-${order.user_id}.pdf`,
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas:  { scale: 2, useCORS: true },
+          jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().from(res.html).set(opt).save();
+      } else {
+        alert("Invoice not found or could not be generated.");
+      }
+    } catch (error) {
+      console.error("Error downloading invoice:", error);
+      alert("Error downloading invoice.");
+    }
   };
 
   // FILTER LOGIC
@@ -145,12 +167,20 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
                   <td>{moment(order?.DATE).format("MM/DD/YYYY")}</td>
 
                   <td>
-                    <button
-                      className="btn btn-sm btn-info"
-                      onClick={() => setViewData(order)}
-                    >
-                      View
-                    </button>
+                    <div className="d-flex gap-2 justify-content-center">
+                      <button
+                        className="btn btn-sm btn-info text-white"
+                        onClick={() => setViewData(order)}
+                      >
+                        View
+                      </button>
+                      <button
+                        className="btn btn-sm btn-success text-white"
+                        onClick={() => handleDownloadInvoice(order)}
+                      >
+                        Invoice
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))
@@ -256,6 +286,55 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
                     {viewData.user_country && <>{viewData.user_country}</>}
                   </div>
                 </div>
+
+                {/* CART ITEMS FROM DB */}
+                {(() => {
+                  let cartData = [];
+                  try {
+                    if (viewData.cart_data) {
+                      cartData = typeof viewData.cart_data === "string" 
+                        ? JSON.parse(viewData.cart_data) 
+                        : viewData.cart_data;
+                    }
+                  } catch (err) {}
+
+                  if (cartData && cartData.length > 0) {
+                    return (
+                      <div className="card mb-3">
+                        <div className="card-header bg-light">
+                          <strong>Cart Items</strong>
+                        </div>
+                        <div className="table-responsive">
+                          <table className="table table-bordered mb-0">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>PRODUCT</th>
+                                <th>WEIGHT</th>
+                                <th>PRICE</th>
+                                <th>QTY</th>
+                                <th>TOTAL</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {cartData.map((item, i) => (
+                                <tr key={i}>
+                                  <td>{i + 1}</td>
+                                  <td>{item.product_name || item.name || "Product"}</td>
+                                  <td>{item.product_weight || item.weight || "N/A"}</td>
+                                  <td>₹{item.product_price}</td>
+                                  <td>{item.product_quantity}</td>
+                                  <td>₹{item.product_total_amount || (item.product_price * item.product_quantity)}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
 
                 {/* PAYMENT DETAILS (PARSED JSON) */}
                 {(() => {
@@ -385,42 +464,6 @@ const OrderTable = ({ ordersData = [], headings = [], refresh = () => {} }) => {
                         {payment.notes && (
                           <div className="mt-3">
                             <strong>Notes:</strong>
-
-                            {/* CART ITEMS */}
-                            {payment.notes.cart &&
-                              Array.isArray(payment.notes.cart) && (
-                                <div className="mt-2">
-                                  <strong>Cart Items:</strong>
-                                  <table className="table table-bordered mt-2">
-                                    <thead>
-                                      <tr>
-                                        <th>Image</th>
-                                        <th>Product ID</th>
-                                        <th>Price</th>
-                                        <th>Qty</th>
-                                        <th>Total</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {payment.notes.cart.map((item, i) => (
-                                        <tr key={i}>
-                                          <td>
-                                            <img
-                                              src={item.product_image}
-                                              alt="product"
-                                              width="50"
-                                            />
-                                          </td>
-                                          <td>{item.product_id}</td>
-                                          <td>₹{item.product_price}</td>
-                                          <td>{item.product_quantity}</td>
-                                          <td>₹{item.product_total_amount}</td>
-                                        </tr>
-                                      ))}
-                                    </tbody>
-                                  </table>
-                                </div>
-                              )}
 
                             {/* OTHER NOTES */}
                             <ul className="mb-0">
